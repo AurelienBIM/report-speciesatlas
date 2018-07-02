@@ -1,0 +1,78 @@
+---
+title: "Internship Report"
+output: pdf_document
+---
+
+
+# Introduction
+
+
+## Context
+
+Biodiversity management is a crucial issue for the upcoming years. It is undoubtedly one of the biggest challenge of the century, and the necessity for mankind to protect it is real. Huge responsabilities lies on the shoulders of those who have to lead it, such as ministries or site managers. Managing the biodiversity stands on several actions. For example, it involves characterisation, quantization, identification, location, ... But maybe the most important aspect of biodiversity management is preservation. 
+
+According to the IUCN [1], more and more species are getting the *endangered* status every year although there are means invested to prevent it. Among these species, the vegetal ones are heavily affected by the deforestation. The most known example is oil palm and all the cuts that its exploitation brings mainly in Southeast Asian countries [2]. This oil is the world cheapest edible and is present in a significant amount of products, this is why the need for it is growing so strong regardless of the havoc it's causing. Some tree species also are threatened  by local farmers that are turning parts of forest into fields to respond to their agricultural needs [3].
+Species of great mammals like elephants or rhinos are jeopardized by poaching, notably in the African continent. These illegal hunts target either their meat or the ivory of their tusks. In most cases, individuals of these species unfortunately are very scarce, this is why it is a priority to preserve them.
+Some species are not as popularized to the general public as pandas or koalas are but they sure aren't less important. For example, bees and others pollinator insects are literally vital to biodiversity, and they are in particular endangered by the overuse of chimical products on plants [4].
+Generally speaking, most of the species will be or are already threatened by climate changes. Due to global warming, many of them are losing their natural habitat. To face this danger, these species are led up to move to another suitable place or to adapt themselves.   
+
+"services écosystémiques"
+
+## Gap Knowledge (--> what do we need and what does already exists)
+
+il y a besoin de : données d'occurrences, carte de distribution, indice de vulnérabilité aux changements climatiques
+
+Déjà des packages qui peuvent fournir ça :
+
+- BIOMOD2/HSDM/SDM/Bioclim mais ce sont des packages techniques à utiliser, pas très user friendly
+
+- maxent, dont l'interface le rend assez facile d'accès mais qui ne prend en compte les résultats que d'un seul modèle, ce qui ommet l'incertitude et propose une synthèse pas vraiment optimisée
+
+## What do we propose ?
+
+- Ce travail demande compétences (stats/infos)/temps, d'où la volonté de créer un outil assez simple d'accès qui fournisse des documents accessibles et permette de travailler avec autant d'espèces qu'on veut sur une zone aussi grande que souhaité.
+- facilité d'utilisation mais méthodologie approfondie qui se base sur plusieurs modèles (modèle d'ensemble avec intégration de l'incertitude).
+- rendu automatisé sous forme de page Web/PDF, avec plusieurs résultats scientifiques (carte distrib, niche écologique, importance des variables) mais aussi des données plus illustratives sur le contexte (taxo, image, description de l'espèce). Dynamicité du rendu --> possibilité de changer le jeu de données.
+- calculs parallélisables sur les différents coeurs de la machine si beaucoup d'espèces
+
+# Method
+
+## Datas
+
+- les jeux de données sur les espèces où sont précisés l'espèce, la latitude et la longitude. On fonctionne sur des modèles de pseudo-abscences, à expliquer. On peut avoir un grand jeu de données avec toutes les espèces ou bien plusieurs plus petits, par exemple par taxons. 
+
+- des données climatiques et environnementales pour la zone sur laquelle faire tourner les modèles. Il en faut des actuelles mais aussi des futures suivant les différents scénarios climatiques/RCP/modèles 
+
+## Models
+
+descritipon de chacun des modèles --> prédiction de proba de présence --> parler de TSS, comment est-ce qu'on passe à une aire de distrib de présence
+assemblage des modèles (model averaging / ensemble forecasting) --> vote des modèles (3/5)
+
+## Tools for the presentation
+
+package, bookdown, knitr
+
+# Results
+
+Parler du cas de Mada (intégrer le contexte de EtcTERRA), on utilise ces 4 variables climatiques car elles sont le moins corrélées et interprétables
+
+Description de la fiche par espèce, donner des cas particuliers (vulnérabilité aux changements climatiques / importance des variables)
+
+# Discussion 
+
+## Applications
+
+utilité pour les gestionnaires de site car :
+- travail sur des milliers d'espèces en un coup
+- quantification et état des lieux de la biodiversité
+- fiche synthétique par espèce
+- possible de faire des cartes/indices de biodiv ou d'avoir une liste d'espèces présentes dans une zone donnée.
+
+## Limitations
+
+moins souple que Biomod mais plus simple d'accès et information synthétique en ayant tout de même des résultats scientifiques quand même poussés
+
+## Perspectives
+
+fonctions à rajouter
+ne plus travailler par espèce mais par communauté
