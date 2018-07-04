@@ -1,0 +1,5 @@
+Species	Tree-ID	Year	Date	Lat	Long	Source	Taxo.group
+Adansonia digitata	Ad-Ando-1	2013	No-information	-16.03029669	45.57405995	CyrilleCornu	Baobabs
+Adansonia madagascariensis	13-Ank	2013	No-information	-12.954611	49.125667	CyrilleCornu	Baobabs
+Adansonia grandidieri	MadAdansonia GH-Adansonia grand	2013	No-information	-20.8756446946	44.1061893943	CyrilleCornu	Baobabs
+Adansonia rubrostipa	Ampitily	2015	No-information	-14.746801	47.378114	CyrilleCornu	Baobabs

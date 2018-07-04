@@ -12,7 +12,7 @@ output: pdf_document
 Biodiversity management is a crucial issue for the upcoming years. It is undoubtedly one of the biggest challenge of the century, and the necessity for mankind to protect it is real. Huge responsabilities lies on the shoulders of those who have to lead it, such as ministries or site managers. Managing the biodiversity stands on several actions. For example, it involves characterisation, quantization, identification, location, ... But maybe the most important aspect of biodiversity management is preservation. 
 
 According to the IUCN [1], more and more species are getting the *endangered* status every year although there are means invested to prevent it. Among these species, the vegetal ones are heavily affected by the deforestation. The most known example is oil palm and all the cuts that its exploitation brings mainly in Southeast Asian countries [2]. This oil is the world cheapest edible and is present in a significant amount of products, this is why the need for it is growing so strong regardless of the havoc it's causing. Some tree species also are threatened  by local farmers that are turning parts of forest into fields to respond to their agricultural needs [3].
-Species of great mammals like elephants or rhinos are jeopardized by poaching, notably in the African continent. These illegal hunts target either their meat or the ivory of their tusks. In most cases, individuals of these species unfortunately are very scarce, this is why it is a priority to preserve them.
+Species of great mammals like elephants or rhinos are jeopardized by poaching, notably on the African continent. These illegal hunts target either their meat or the ivory of their tusks. In most cases, individuals of these species unfortunately are very scarce, this is why it is a priority to preserve them.
 Some species are not as popularized to the general public as pandas or koalas are but they sure aren't less important. For example, bees and others pollinator insects are literally vital to biodiversity, and they are in particular endangered by the overuse of chimical products on plants [4].
 Generally speaking, most of the species will be or already are threatened by climate changes. Due to global warming, many of them are losing their natural habitat. To face this danger, these species are led up to move to another suitable place or to adapt themselves. 
 All the reasons developed above lead to the disparition of whole *ecosystem services*, which is dramatic. These are the benefits that humans gain from properly-functioning ecosystems, with the example of the pollination that was discussed earlier. 
@@ -21,20 +21,41 @@ All the reasons developed above lead to the disparition of whole *ecosystem serv
 
 Site managers need some tools to ensure preservation in best possible ways. In the first place, they obviously require some species occurrences data. These are gathered by collectors that work on the spot. It's a long and meticulous task that demands a lot of expertise. But these sole pieces of information are difficult to exploit in itself. They become way more comprehensible when synthesize as distribution maps or index of vulnerability to climate change. To obtain these documents, there are already some packages available on CRAN, the network where you can download and install any kind of R packages. 
 
-For example, there is the package *BIOMOD2* [5]. This is a package designed to understand the relationship between species and their environment, offering several complementary models to run. Depending on some given variables, distribution datas are produced, for the present and for the future alike. As well as some package of the same kind (SDM [6], hSDM [7]), BIOMOD2 produces some strong results but the main drawback is that it isn't easily accessible. Using the functions of the package requires a really good understanding of all the parameters asked, and there is quite a lot of them. Altogether, these packages are great tools but aren't very user friendly.
+For example, there is the package *BIOMOD2* [5]. This is a package designed to understand the relationship between species and their environment, offering several different models to run. Depending on some given variables, distribution datas are produced, for the present and for the future alike. As well as some package of the same kind (SDM [6], hSDM [7]), *BIOMOD2* produces some strong results but the main drawback is that it isn't easily accessible. Using the functions of the package requires a really good understanding of all the parameters asked, and there is quite a lot of them. Altogether, these packages are great tools but aren't very user friendly.
 
 On the other extreme, there is the *MaxEnt* software, that stands for Maximum Entropy. It is equipped with a Java interface, which clearly is more approachable when you're not an expert in this sector. On the down side, this method is limited to consider only one model, the one proposed by MaxEnt. This way, the uncertainty isn't taken in consideration. Besides, the synthesis of the results isn't really optimized. With these examples, we see that there already are interesting tools for those who manage biodiversity preservation but there are still some progress to be made.
 
 ## What do we propose ?
 
-- Ce travail demande compétences (stats/infos)/temps, d'où la volonté de créer un outil assez simple d'accès qui fournisse des documents accessibles et permette de travailler avec autant d'espèces qu'on veut sur une zone aussi grande que souhaité.
-- facilité d'utilisation mais méthodologie approfondie qui se base sur plusieurs modèles (modèle d'ensemble avec intégration de l'incertitude).
-- rendu automatisé sous forme de page Web/PDF, avec plusieurs résultats scientifiques (carte distrib, niche écologique, importance des variables) mais aussi des données plus illustratives sur le contexte (taxo, image, description de l'espèce). Dynamicité du rendu --> possibilité de changer le jeu de données.
-- calculs parallélisables sur les différents coeurs de la machine si beaucoup d'espèces
+We saw that the task of managing a site and focusing on some areas rather than others is a decisive work. It demands both computing and statistical skills, in addition to time. People in charge don't necessarily have those, and this is why the development of the *speciesatlas* R package started. Its main goal is to fill in the gaps left by the other packages, by offering some reliable methods and an accessible interface for the wide public.
+
+On the technical part, *speciesatlas* uses 5 of the models from *BIOMOD2* that were chosen because of their complementarity. These models are obviously taking the uncertainty in consideration. For each species given, present and future distribution maps are produced, as well as the ecological niche. The importance of the input variables is also estimated. An important motive of the package is also to be quite illustrative. This is why taxonomy, image and  description text are provided besides of the previous documents. All of these are gathered in a synthetic sheet.
+
+The rendering is automated in the form of a Web page or a PDF document. The choice of the output format is left to the user. One interessant feature is that the calculus can be parallelized when there is a huge amount of data to process. If the computing device has several cores, spreading the task between them will reduce the running time significantly. Finally, the rendering is totally dynamic. That means that the database can be changed as many time as wanted. 
+
 
 # Method
 
 ## Datas
+
+To use the package, it is essential to provide a database relative to the species and the place to be studied. This database only need to specify the name of the specie, the latitude and the longitude of the observation and the taxon group. The datas must be splitted into the different taxons in presence, like in the example below. The package is functioning with the concept of pseudo-absence. It means that species are not necessarily considered missing of pixels where there isn't any observation of it. A small probability of their presence is taken in consideration. This method proved its reliability against simply considering the specie absent when there is no presence.
+
+```{r echo=FALSE, results='asis'}
+taxon.names <- c("lemurs","baobabs")
+df.orig <- vector("list", length = length(taxon.names))
+
+for (sp in 1:2){
+  taxon <- read.csv(file=paste0("data/",taxon.names[sp],".txt"),header=TRUE,sep="\t")
+  df.orig[[sp]]$Species <- taxon$Species
+  df.orig[[sp]]$Lat <- taxon$Lat
+  df.orig[[sp]]$Long <- taxon$Long
+  df.orig[[sp]]$Taxo.group <- taxon.names[sp]
+  df.orig[[sp]] <- df.orig[[sp]]
+}
+```
+```{r echo=TRUE, results='asis'}
+df.orig # Input data must be this form
+```
 
 - les jeux de données sur les espèces où sont précisés l'espèce, la latitude et la longitude. On fonctionne sur des modèles de pseudo-abscences, à expliquer. On peut avoir un grand jeu de données avec toutes les espèces ou bien plusieurs plus petits, par exemple par taxons. 
 
