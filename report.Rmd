@@ -38,9 +38,9 @@ The rendering is automated in the form of a Web page or a PDF document. The choi
 
 ## Datas
 
-To use the package, it is essential to provide a database relative to the species and the place to be studied. This database only need to specify the name of the specie, the latitude and the longitude of the observation and the taxon group. The datas must be splitted into the different taxons in presence, like in the example below. The package is functioning with the concept of pseudo-absence. It means that species are not necessarily considered missing of pixels where there isn't any observation of it. A small probability of their presence is taken in consideration. This method proved its reliability against simply considering the specie absent when there is no presence.
+To use the package, it is essential to provide a database relative to the species and the place to be studied. This database only needs to specify the name of the specie, the latitude and the longitude of the observation and the taxon group. The datas must be splitted into the different taxons in presence, like in the example below. The package is functioning with the concept of pseudo-absence [8]. It means that species are not necessarily considered missing of pixels where there isn't any observation of it. A small probability of their presence is taken in consideration. This method proved its reliability against simply considering the specie absent when there is no presence.
 
-```{r echo=FALSE, results='asis'}
+```{r echo=FALSE, results='asis',message=FALSE,warning=FALSE}
 taxon.names <- c("lemurs","baobabs")
 df.orig <- vector("list", length = length(taxon.names))
 
@@ -57,14 +57,36 @@ for (sp in 1:2){
 df.orig # Input data must be this form
 ```
 
-- les jeux de données sur les espèces où sont précisés l'espèce, la latitude et la longitude. On fonctionne sur des modèles de pseudo-abscences, à expliquer. On peut avoir un grand jeu de données avec toutes les espèces ou bien plusieurs plus petits, par exemple par taxons. 
+In addition to this list of dataframes, the package needs environmental and climatic datas about the place of interest. These can be passed in a *.TIF* file containing a raster for every variable of the study. Since the package offers distribution predictions for both present and future, several  rasterstacks are involved . A contemporary one is enough but some future's are needed. The package require a rasterstack for every different representative concentration pathways (RCP), global climate models (GCM) and year of prediction. 
 
-- des données climatiques et environnementales pour la zone sur laquelle faire tourner les modèles. Il en faut des actuelles mais aussi des futures suivant les différents scénarios climatiques/RCP/modèles 
+```{r echo=FALSE, results='asis',message=FALSE,warning=FALSE}
+library(raster)
+environ <- stack(stack("data/current.tif"),stack("data/environ.tif"))
+names(environ) <- c(paste0("current",1:36),"temp",paste0("current",38:39),"tseas",paste0("current",41:47),"prec",paste0("current",49:68),"cwd","current70","alt",paste0("environ",2:9))
+environ <- stack(environ[[c("temp","tseas","prec","cwd","alt")]]) # Transform back from RasterBrick to RasterStack
+```
+```{r echo=TRUE, results='asis'}
+environ # This is an exemple of rasterstack for the present.
+```
 
 ## Models
 
-descritipon de chacun des modèles --> prédiction de proba de présence --> parler de TSS, comment est-ce qu'on passe à une aire de distrib de présence
-assemblage des modèles (model averaging / ensemble forecasting) --> vote des modèles (3/5)
+The package uses *BIOMOD2* for the technical part. It only takes its advantage and not its default, because the parameters are already set in *speciesatlas*. Each model returns a binary response for a presence at a specific location, and that is why having several models is so important to predict presence probability. The model averaging is quite simple, it was decided that if 3 models on 5 indicate a presence, we could consider it as well. We chose 5 models of *BIOMOD2* that were complementary and offer a solid adaptation to the diverstity of the data input. Those are :
+
+-- *Generalized Linear Model (GLM)* : it is an adaptable generalization of the linear regression. It allows to connect the linear model to the response variable with a link function. That function is *logit* in the package. That model is very general and can suit to most of the case.
+
+-- *Generalized Additive Model (GAM)* [9] : it is close to a GLM but it benefits the properties of additive models. The linear relationship between the response and predictor variables is replaced by non-linear *smooths* functions. GAM can suit other cases than  GLM, notably the ones where there's a few observations.
+
+-- *Random Forest (RF)* : it is a supervised classification algorithm that creates plenty of decision trees. It is training on some of the data to classify the other. Thanks to the random process of the nodes, there is no overfit if there's enough trees. That is the main advantage of this model.
+
+-- *Maximum Entropy (MaxEnt)* : based on the number of individuals and the total energy, relative abundance distribution is predicted. Maximizing the entropy is the way to discriminate the different possibilities. The version used in the package is MaxEnt.Phillips.
+
+-- *Artificial Neural Network (ANN)* : this model is inspired from brains' neural network, it means that it is learning task after task. It's interesting to have this model in the package because of its complementarity with the others.
+
+## Effectiveness indicators
+
+TSS toussa
+
 
 ## Tools for the presentation
 
