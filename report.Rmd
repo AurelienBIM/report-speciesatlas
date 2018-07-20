@@ -6,6 +6,9 @@ output: pdf_document
 
 # Introduction
 
+```{r include = FALSE}
+knitr::opts_chunk$set(echo=TRUE)
+```
 
 ## Context
 
@@ -21,15 +24,15 @@ All the reasons developed above lead to the disparition of whole *ecosystem serv
 
 Site managers need some tools to ensure preservation in best possible ways. In the first place, they obviously require some species occurrences data. These are gathered by collectors that work on the spot. It's a long and meticulous task that demands a lot of expertise. But these sole pieces of information are difficult to exploit in itself. They become way more comprehensible when synthesize as distribution maps or index of vulnerability to climate change. To obtain these documents, there are already some packages available on CRAN, the network where you can download and install any kind of R packages. 
 
-For example, there is the package *BIOMOD2* [5]. This is a package designed to understand the relationship between species and their environment, offering several different models to run. Depending on some given variables, distribution datas are produced, for the present and for the future alike. As well as some package of the same kind (SDM [6], hSDM [7]), *BIOMOD2* produces some strong results but the main drawback is that it isn't easily accessible. Using the functions of the package requires a really good understanding of all the parameters asked, and there is quite a lot of them. Altogether, these packages are great tools but aren't very user friendly.
+For example, there is the package `BIOMOD2` [5]. This is a package designed to understand the relationship between species and their environment, offering several different models to run. Depending on some given variables, distribution datas are produced, for the present and for the future alike. As well as some package of the same kind (SDM [6], hSDM [7]), `BIOMOD2` produces some strong results but the main drawback is that it isn't easily accessible. Using the functions of the package requires a really good understanding of all the parameters asked, and there is quite a lot of them. Altogether, these packages are great tools but aren't very user friendly.
 
-On the other extreme, there is the *MaxEnt* software, that stands for Maximum Entropy. It is equipped with a Java interface, which clearly is more approachable when you're not an expert in this sector. On the down side, this method is limited to consider only one model, the one proposed by MaxEnt. This way, the uncertainty isn't taken in consideration. Besides, the synthesis of the results isn't really optimized. With these examples, we see that there already are interesting tools for those who manage biodiversity preservation but there are still some progress to be made.
+On the other extreme, there is the `MaxEnt` software, that stands for Maximum Entropy. It is equipped with a Java interface, which clearly is more approachable when you're not an expert in this sector. On the down side, this method is limited to consider only one model, the one proposed by MaxEnt. This way, the uncertainty isn't taken in consideration. Besides, the synthesis of the results isn't really optimized. With these examples, we see that there already are interesting tools for those who manage biodiversity preservation but there are still some progress to be made.
 
 ## What do we propose ?
 
-We saw that the task of managing a site and focusing on some areas rather than others is a decisive work. It demands both computing and statistical skills, in addition to time. People in charge don't necessarily have those, and this is why the development of the *speciesatlas* R package started. Its main goal is to fill in the gaps left by the other packages, by offering some reliable methods and an accessible interface for the wide public.
+We saw that the task of managing a site and focusing on some areas rather than others is a decisive work. It demands both computing and statistical skills, in addition to time. People in charge don't necessarily have those, and this is why the development of the `speciesatlas` R package started. Its main goal is to fill in the gaps left by the other packages, by offering some reliable methods and an accessible interface for the wide public.
 
-On the technical part, *speciesatlas* uses 5 of the models from *BIOMOD2* that were chosen because of their complementarity. These models are obviously taking the uncertainty in consideration. For each species given, present and future distribution maps are produced, as well as the ecological niche. The importance of the input variables is also estimated. An important motive of the package is also to be quite illustrative. This is why taxonomy, image and  description text are provided besides of the previous documents. All of these are gathered in a synthetic sheet.
+On the technical part, `speciesatlas` uses 5 of the models from `BIOMOD2` that were chosen because of their complementarity. These models are obviously taking the uncertainty in consideration. For each species given, present and future distribution maps are produced, as well as the ecological niche. The importance of the input variables is also estimated. An important motive of the package is also to be quite illustrative. This is why taxonomy, image and  description text are provided besides of the previous documents. All of these are gathered in a synthetic sheet.
 
 The rendering is automated in the form of a Web page or a PDF document. The choice of the output format is left to the user. One interessant feature is that the calculus can be parallelized when there is a huge amount of data to process. If the computing device has several cores, spreading the task between them will reduce the running time significantly. Finally, the rendering is totally dynamic. That means that the database can be changed as many time as wanted. 
 
@@ -71,11 +74,13 @@ environ # This is an exemple of rasterstack for the present.
 
 ## Models
 
-The package uses *BIOMOD2* for the technical part. It only takes its advantage and not its default, because the parameters are already set in *speciesatlas*. Each model returns a binary response for a presence at a specific location, and that is why having several models is so important to predict presence probability. The model averaging is quite simple, it was decided that if 3 models on 5 indicate a presence, we could consider it as well. We chose 5 models of *BIOMOD2* that were complementary and offer a solid adaptation to the diverstity of the data input. Those are :
+Under a certain number of individuals for a given species, it is quite absurd to run models on it. It may theoretically make the calculus but the results would have no sense. After some experimentations, we decided to set this number to 10. It indeed removes a lot of species but we could have not make any interpretation on them.
 
--- *Generalized Linear Model (GLM)* : it is an adaptable generalization of the linear regression. It allows to connect the linear model to the response variable with a link function. That function is *logit* in the package. That model is very general and can suit to most of the case.
+The package uses `BIOMOD2` for the technical part. It only takes its advantage and not its default, because the parameters are already set in `speciesatlas`. Each model returns a binary response for a presence at a specific location, and that is why having several models is so important to predict presence probability. The model averaging is quite simple, it was decided that if 3 models on 5 indicate a presence, we could consider it as well. We chose 5 models of `BIOMOD2` that were complementary and offer a solid adaptation to the diverstity of the data input. Those are :
 
--- *Generalized Additive Model (GAM)* [9] : it is close to a GLM but it benefits the properties of additive models. The linear relationship between the response and predictor variables is replaced by non-linear *smooths* functions. GAM can suit other cases than  GLM, notably the ones where there's a few observations.
+-- *Generalized Linear Model (GLM)* : it is an adaptable generalization of the linear regression. It allows to connect the linear model to the response variable with a link function. That function is *logit* in the package. That model is very general and can suit to most of the cases.
+
+-- *Generalized Additive Model (GAM)* [9] : it is close to a GLM but it benefits the properties of additive models. The linear relationship between the response and predictor variables is replaced by non-linear *smooths* functions. GAM can suit other cases than  GLM, notably the ones where there's few observations.
 
 -- *Random Forest (RF)* : it is a supervised classification algorithm that creates plenty of decision trees. It is training on some of the data to classify the other. Thanks to the random process of the nodes, there is no overfit if there's enough trees. That is the main advantage of this model.
 
@@ -85,16 +90,127 @@ The package uses *BIOMOD2* for the technical part. It only takes its advantage a
 
 ## Effectiveness indicators
 
-TSS toussa
+To verify the truthfulness of the models' calculus, other functionalities of `BIOMOD2` can be used. The function `Find.Optim.Stat` offers several effectiveness indicators [10] than help to evaluate the results. For the first 4 indicators, the more the values are close to 1, the best the functioning is. And for the 2 last, the best possible value is 100%. Among them, the following were chosen :
+
+-- *Relative Operating Characteristic (ROC)* : evaluates the models using the Area Under the Curve (AUC)
+
+-- *Accuracy (OA)*
+
+-- *True Skill Statistic (TSS)*
+
+-- *KAPPA (K)* 
+
+-- *Sensitivity (Sen.)* : fraction of the true positive
+
+-- *Specificity (Spe.)* : fraction of the true negative
+
+## Structure of the code
+
+After talking about the substance of the package by studying its technical part, time has come to discuss the form of it. First, the decision to make a package quickly became evident. We wanted to have a practical and shareable tool, and the medium of the package maybe is the best for that. To do that, we used the R library `Devtools`, which is really helpful to create packages and to share them. For clarity reasons, the R code was separated between different scripts. That makes it easier to modify only a small section of the package, and its architecture gets clearer either. The different scripts of the package are :
+
+-- `speciesatlas.R` : the main script of the package, containing the `fun.main` function. It calls `fun.data` and it handles the parallelization of the calculus between the different cores of the device.
+
+-- `fun.data.R` : rearrange the datas into `SpatialPointsDataFrame`. It order to name files, it creates a vector with proper species names (points instead of spaces).
+
+-- `fun.species.R` : the function `fun.species` is called for every species. It figures out if there's enough complete observations to run the models.  Afterthat it calls the `fun.extent` function and eventually the functions `fun.models`, `fun.plot` and `fun.taxo` are called.
+
+-- `fun.extent.R` : determines if a zoom could be useful, in case there's few individuals of the species of if they are very gathered.
+
+-- `fun.models.R` : runs all the models for a given species. If the parameter `run.models` is set on `FALSE`, it just loads the files.
+
+-- `fun.plot.R` : If `run.plot` is set on `TRUE`, the different maps are generated.
+
+-- `fun.taxo.R` : If `run.taxo` is set on `TRUE`, taxonomy, descriptive image and text are collected on *Encyclopedia of Life*.
+
+-- `fun.book.R` : Produces the `Bookdown` output.
+
+-- `fun.pdf.R` : Produces the *PDF* output.
+
+-- `fun.map.R` : Produces the specific richness maps, global and for every taxon.
+
+
+
+Creating a R package was in actual fact a brand new thing for me. A lot of online tutorials helped me to achieve this task, but the main library that I used was `Devtools`. The first step for the creation is the command `devtools::create("package.name")` : it creates the basic architecture of the package, also called the skeleton. The following files are automatically generated :
+
+-- a *DESCRIPTION* file : informations like authors, version, license and libraries to import are in it.
+
+-- a *NAMESPACE* file : here are established functions that can be run by the user and functions from libraries that will be used in the package.
+
+-- a *.gitignore* file : you indicate if there are files (test scripts or development notes) that you don't want to be in the final package.
+
+-- a *R/* folder : all the R scripts that constitute the package must be put here.
+
 
 
 ## Tools for the presentation
 
-package, bookdown, knitr
+In the case of the `speciesatlas` package, we needed to include *.Rnw* and *.Rmd* files, but it's impossible to place them in the *R/* folder. The tip is to put all these non-R files in a *inst/* folder: actually every file in this folder will remain untouched while the installation of the package. It is later possible to access these files with the R command `system.file`. Afterthat, it is important to add a *README.md* file and a *man/* folder containing a *.md* file for every function accessible for the user. The *README.md* file must present the package and explain how to use it : it is the front page on the *Github repository*. The *.md* files explain in details the arguments needed by the function and its output. 
+
+
+
+`library(devtools)`
+
+`devtools::install_github("AurelienBIM/speciesatlas")`
+
+`library(speciesatlas)`
+
+
+It only is with those few lines of R code that the package can be downloaded and installed. When the package is ran, the output can take 2 different forms. It's the user's job to specify which one he wants. Thanks to some files coded in Sweave and the `knitr` package [12], there can be a *PDF* output. We also added a `Bookdown` [13] output : this is a package using the `R Markdown` language to create interactive books. It produce multiple HTML pages and can easily be turned in a website. 
 
 # Results
 
-Parler du cas de Mada (intégrer le contexte de EtcTERRA), on utilise ces 4 variables climatiques car elles sont le moins corrélées et interprétables
+## Context of our tests
+
+Peut-être à mettre dans l'introduction --> tri à faire
+
+The production of a biodiversity atlas is part of the *BioSceneMada project* [14], led by both the *CIRAD* and *EtcTerra*. This project started in 2014 and its aim is to evaluate the biodiversity scenarios under the effect of climate change and future deforestation in Madagascar. The datas used in the project come from the *REBIOMA* project that collected a lot of observations of the biodiversity in the whole island of Madagascar. Two of the dataset used in the tests are coming from there : one for baobabs and one for lemurs. To push the tests a little further, we also added data for birds coming from *eBird*. In the end we tested the package on 362 different species (8 of boababs, 71 of lemurs, 283 of birds). 
+
+*EtcTerra* is the association where i am doing my internship. This name is used since the creation in 2012 but in the beginning of the year, *EtcTerra* and *Rongead* merged to become *Nitidae*. They are engaged in several countries of Africa, such as Madagascar, Mozambique, Mali, ... 
+
+In this project, the area on which we tested the package was the whole island of Madagascar. We chose this area to be in accordance with the project but the package is fully adaptable to other places. Madagascar is very interesting to study in this context because of its rich and abundant biodiversity. Not only there is many species of animals or vegetation but a lot of these are endemic to the isle. Among all the country we could have the necessary data, Madagascar may be the best example. 
+
+To run the models, we chose 5 climatic and environmental variables. This choice is crucial because the results rely directly on it. We were looking for variables that were the least correlate but though the most complete. One important point to choose these ones was that they are easily interpretable.
+
+-- *Annual Mean Temperature (temp)*
+
+-- *Temperature Seasonability (tseas)*
+
+-- *Annual Precipitation (prec)*
+
+-- *Climatic Water Deficit (cwd)*
+
+-- *Altitude (alt)*
+
+Afterthat we had to choose which future scenarios to study. It was important to have several predictions but not to much either otherwise the calculus time would have been too high. So we favoured the following scenarios :
+
+-- for *Representative Concentration Pathways* : RCP4.5 and RCP8.5. These numbers are W/m^2^, they correspond to scenarios of the planet warming.   
+
+-- for *Global Climate Models* : *Community Climate System Model (CCSM4)* [16], *Goddard Institute for Space Studies Model E version 2 with Russell ocean model (GISS-E2-R)* [17] and *Hadley Global Environment Model 2 - Earth System (HadGEM2-ES)* [18].
+
+-- for *years* : 2050 and 2080.
+
+
+## Content of an atlas page
+
+Now we're gonna describe the different items that constitute an atlas page. As said before the output can be *HTML* or *PDF* but the content is strictly the same for both of the mediums. On top of the page there is the name of the species, its taxonomy with the kingdom and the family. When available there's also the authority (name and year) and the IUCN status. It is an endangerment indicators for every species, with different levels of threat like *Least Concern* (LC), *Vulnerable* (VU) or *Critically Endangered* (CR). Below these, there are descriptive image and text (when available) that helps to know which species it is about if its name is not evocative enough. A link to the corresponding *Encyclopedia of Life* page is given for every species. The first map on the top left is showing all the occurences of the species with the map of the area for background. The number of occurences for the species is written on the right of the maps.
+
+Every species have those items in common, but the presence of the other informations depend on the number of occurences for the species. We saw that earlier, we chose not to run the models if the species presented less than 10 observations. For those species, there isn't anything else on the atlas page. For other species with enough inidividuals, the results of the models are presented over several maps and tables. The second map is showing the binary vote for every model concerning the presence of the species. If 3 models or more are considering the presence on a pixel, we admit the species is present there, and it is colored in green on the map. The sum of these presences gives us the *Species distribution area*, which is the predicted number of km^2^ with at least one presence of the species. Also there is a table that shows the values for the effectiveness indicators that were presented earlier. 
+
+On the following section, the graph on the left is presenting the relation between *Annual precipitation* and *Mean annual temperature* : every species is marked by a dot at the intersection of its value for the two variables. It allows us to see if the species only live under certain conditions. For most of the species, those climatic niches are  relatively gathered. On the right of this section, there's firstly a table that informs us on the environmental tendancy for places where individuals of the species where detected. There are the mean and quantiles for every variable studied, it gives an idea on the environment this species need. The second table gives information on the importance of the climatic variables. In other words it designates which are the variables that are conditioning the most the presence of the species. We can read the results for every 5 models of `BIOMOD2`, and there's a synthesis on the two last columns.
+
+The last section of the page is presenting the results obtained for the different future scenarios. The two maps on the left are the extreme cases (RCP8.5 and 2080) with or without dispersion. There's 15 levels on the legend because of the 5 models and the 3 GCMs. For every GCM we have the binary response for every distribution model. That time we consider the species present on a pixel if at least 8 out of 15 answers are positive. Summing these pixels provides us the new *Species distribution area* for this scenario, and we can measure the percentage of variation relative to the projections for the present. Those informations are in the two last columns of the table. 
+
+## Exploitation of the results
+
+With the projections of distribution that `BIOMOD2` is producing, it is possible to make some maps of specific richness, whether by taxon or with all of them.
+
+```{r, echo=FALSE, fig.pos ='h', fig.align = 'center', fig.show = "hold", fig.cap = "Exemple de figure"}
+knitr::include_graphics("data/baobabs.richness.pdf")
+```
+
+
+
+
 
 Description de la fiche par espèce, donner des cas particuliers (vulnérabilité aux changements climatiques / importance des variables)
 
@@ -111,6 +227,7 @@ utilité pour les gestionnaires de site car :
 ## Limitations
 
 moins souple que Biomod mais plus simple d'accès et information synthétique en ayant tout de même des résultats scientifiques quand même poussés
+on pourrait ajouter le couvert forestier, et différencier les variables par taxon.
 
 ## Perspectives
 
