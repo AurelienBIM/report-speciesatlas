@@ -1,0 +1,74 @@
+---
+title: "Internship Report"
+author: "Aurelien Colas"
+date: "24/07/2018"
+fontsize: 12pt
+output:
+  bookdown::gitbook:
+    number_sections: no
+    split_by: chapter  
+    config:
+      toc:
+        collapse: section
+        scroll_highlight: yes
+        before: null
+        after: null
+      toolbar:
+        position: fixed
+      edit: null
+      download: ["pdf"]
+      search: yes
+      fontsettings:
+        theme: white
+        family: sans
+        size: 2
+      sharing:
+        facebook: yes
+        twitter: yes
+        google: no
+        linkedin: no
+        weibo: no
+        instapper: no
+        vk: no
+        all: ['facebook', 'google', 'twitter', 'linkedin', 'weibo', 'instapaper']  
+  bookdown::pdf_document2:
+    citation_package: natbib
+    fig_caption: yes
+    keep_tex: no
+    latex_engine: pdflatex
+    number_sections: no
+    toc: no
+    includes:
+      in_header: header.tex
+      before_body: doc_prefix.tex
+bibliography: bib/biblio.bib
+biblio-style: bib/jae
+link-citations: yes
+csl: bib/journal-of-applied-ecology.csl
+---
+
+```{r options, echo=FALSE, results="hide"}
+library(bookdown)
+library(knitr)
+library(kableExtra)
+opts_chunk$set(echo=FALSE, cache=FALSE,
+               # results="hide", 
+               warning=FALSE,
+               message=FALSE, highlight=TRUE,
+               fig.show="hide", size="small",
+               fig.align="center",
+               fig.pos="H",
+               tidy=FALSE)
+```
+
+# Foreword {-}
+
+The production of a biodiversity atlas is part of the *BioSceneMada project* [@Vieilledent2018], led by both the *CIRAD* and *EtcTerra*. This project started in 2014 and its aim is to evaluate the biodiversity scenarios under the effect of climate change and future deforestation in Madagascar. *EtcTerra* is the association where i am doing my internship. Most of its employees comes from the Yann Arthus-Bertrand's *GoodPlanet* Foundation. They were part of the *Carbon Action* programme, and in 2012 they created their own association in full collaboration with *GoodPlanet*. They are engaged in several countries of Africa, such as Madagascar, Mozambique, Mali, Ivory Coast ... The main mission of *EtcTerra* is to lead projects that preserve the environment while contributing to the local economy. In the beginning of the year, *EtcTerra* and *Rongead* merged to become *Nitidae*. 
+
+If the subject of my internship was only to work on Madagascar's biodiversity, it changed a little as I was working in Montpellier. Actually the R script relative to Madagascar became a R package compatible with every given area. 
+
+```{r cc-license}
+knitr::include_graphics("figures/by-sa.png")
+```
+
+This report is licensed under the [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/).

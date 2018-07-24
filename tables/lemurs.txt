@@ -1,0 +1,5 @@
+order	Taxo.group	Species	acceptedNameUsage	Lat	Long	geodeticdatum
+Primates	Lemurs	Eulemur fulvus	Eulemur fulvus	-19.7	47.8	WGS84
+Primates	Lemurs	Allocebus trichotis	Allocebus trichotis	-14.32861	48.58611	WGS84
+Primates	Lemurs	Avahi laniger	Avahi laniger	-21.183	48.334	WGS84
+Primates	Lemurs	Hapalemur griseus	Hapalemur griseus	-18.74623	48.75815	WGS84

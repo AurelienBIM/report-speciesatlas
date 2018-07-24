@@ -1,0 +1,119 @@
+# 2. Method
+
+## Datas
+
+To use the package, it is essential to provide a database relative to the species and the place to be studied. This database only needs to specify the name of the specie, the latitude and the longitude of the observation and the taxon group. The datas must be splitted into the different taxons in presence, like in the example below. The package is functioning with the concept of pseudo-absence [@Barbet2012]. It means that species are not necessarily considered missing of pixels where there isn't any observation of it. A small probability of their presence is taken in consideration. This method proved its reliability against simply considering the specie absent when there is no presence.
+
+```{r echo=FALSE, results='asis',message=FALSE,warning=FALSE}
+taxon.names <- c("lemurs","baobabs")
+df.orig <- vector("list", length = length(taxon.names))
+
+for (sp in 1:2){
+  taxon <- read.csv(file=paste0("tables/",taxon.names[sp],".txt"),header=TRUE,sep="\t")
+  df.orig[[sp]]$Species <- taxon$Species
+  df.orig[[sp]]$Lat <- taxon$Lat
+  df.orig[[sp]]$Long <- taxon$Long
+  df.orig[[sp]]$Taxo.group <- taxon.names[sp]
+  df.orig[[sp]] <- df.orig[[sp]]
+}
+```
+```{r echo=TRUE, results='asis'}
+df.orig # Input data must be this form
+```
+
+In addition to this list of dataframes, the package needs environmental and climatic datas about the place of interest. These can be passed in a *.TIF* file containing a raster for every variable of the study. Since the package offers distribution predictions for both present and future, several  rasterstacks are involved . A contemporary one is enough but some future's are needed. The package require a rasterstack for every different representative concentration pathways (RCP), global climate models (GCM) and year of prediction. 
+
+```{r echo=FALSE, results='asis',message=FALSE,warning=FALSE}
+library(raster)
+environ <- stack(stack("tables/current.tif"),stack("tables/environ.tif"))
+names(environ) <- c(paste0("current",1:36),"temp",paste0("current",38:39),"tseas",paste0("current",41:47),"prec",paste0("current",49:68),"cwd","current70","alt",paste0("environ",2:9))
+environ <- stack(environ[[c("temp","tseas","prec","cwd","alt")]]) # Transform back from RasterBrick to RasterStack
+```
+```{r echo=TRUE, results='asis'}
+environ # This is an exemple of rasterstack for the present.
+```
+
+## Models
+
+Under a certain number of individuals for a given species, it is quite absurd to run models on it. It may theoretically make the calculus but the results would have no sense. After some experimentations, we decided to set this number to 10. It indeed removes a lot of species but we could have not make any interpretation on them.
+
+The package uses `BIOMOD2` for the technical part. It only takes its advantage and not its default, because the parameters are already set in `speciesatlas`. Each model returns a binary response for a presence at a specific location, and that is why having several models is so important to predict presence probability. The model averaging is quite simple, it was decided that if 3 models on 5 indicate a presence, we could consider it as well. We chose 5 models of `BIOMOD2` that were complementary and offer a solid adaptation to the diverstity of the data input. Those are :
+
+-- *Generalized Linear Model (GLM)* : it is an adaptable generalization of the linear regression. It allows to connect the linear model to the response variable with a link function. That function is *logit* in the package. That model is very general and can suit to most of the cases.
+
+-- *Generalized Additive Model (GAM)* [@Jones1992] : it is close to a GLM but it benefits the properties of additive models. The linear relationship between the response and predictor variables is replaced by non-linear *smooths* functions. GAM can suit other cases than  GLM, notably the ones where there's few observations.
+
+-- *Random Forest (RF)* : it is a supervised classification algorithm that creates plenty of decision trees. It is training on some of the data to classify the other. Thanks to the random process of the nodes, there is no overfit if there's enough trees. That is the main advantage of this model.
+
+-- *Maximum Entropy (MaxEnt)* : based on the number of individuals and the total energy, relative abundance distribution is predicted. Maximizing the entropy is the way to discriminate the different possibilities. The version used in the package is MaxEnt.Phillips.
+
+-- *Artificial Neural Network (ANN)* : this model is inspired from brains' neural network, it means that it is learning task after task. It's interesting to have this model in the package because of its complementarity with the others.
+
+## Effectiveness indicators
+
+To verify the truthfulness of the models' calculus, other functionalities of `BIOMOD2` can be used. The function `Find.Optim.Stat` offers several effectiveness indicators [@effectiveness] than help to evaluate the results. For the first 4 indicators, the more the values are close to 1, the best the functioning is. And for the 2 last, the best possible value is 100%. Among them, the following were chosen :
+
+-- *Relative Operating Characteristic (ROC)* : evaluates the models using the Area Under the Curve (AUC)
+
+-- *Accuracy (OA)*
+
+-- *True Skill Statistic (TSS)*
+
+-- *KAPPA (K)* 
+
+-- *Sensitivity (Sen.)* : fraction of the true positive
+
+-- *Specificity (Spe.)* : fraction of the true negative
+
+## Structure of the code
+
+After talking about the substance of the package by studying its technical part, time has come to discuss the form of it. First, the decision to make a package quickly became evident. We wanted to have a practical and shareable tool, and the medium of the package maybe is the best for that. To do that, we used the R library `Devtools`[@devtools], which is really helpful to create packages and to share them. For clarity reasons, the R code was separated between different scripts. That makes it easier to modify only a small section of the package, and its architecture gets clearer either. The different scripts of the package are :
+
+-- `speciesatlas.R` : the main script of the package, containing the `fun.main` function. It calls `fun.data` and it handles the parallelization of the calculus between the different cores of the device.
+
+-- `fun.data.R` : rearrange the datas into `SpatialPointsDataFrame`. It order to name files, it creates a vector with proper species names (points instead of spaces).
+
+-- `fun.species.R` : the function `fun.species` is called for every species. It figures out if there's enough complete observations to run the models.  Afterthat it calls the `fun.extent` function and eventually the functions `fun.models`, `fun.plot` and `fun.taxo` are called.
+
+-- `fun.extent.R` : determines if a zoom could be useful, in case there's few individuals of the species of if they are very gathered.
+
+-- `fun.models.R` : runs all the models for a given species. If the parameter `run.models` is set on `FALSE`, it just loads the files.
+
+-- `fun.plot.R` : If `run.plot` is set on `TRUE`, the different maps are generated.
+
+-- `fun.taxo.R` : If `run.taxo` is set on `TRUE`, taxonomy, descriptive image and text are collected on *Encyclopedia of Life*.
+
+-- `fun.book.R` : Produces the `Bookdown` output.
+
+-- `fun.pdf.R` : Produces the *PDF* output.
+
+-- `fun.map.R` : Produces the specific richness maps, global and for every taxon.
+
+## Creation of a R package
+
+Creating a R package was in actual fact a brand new thing for me. A lot of online tutorials helped me to achieve this task, but the main library that I used was `Devtools`. The first step for the creation is the command `devtools::create("package.name")` : it creates the basic architecture of the package, also called the skeleton. The following files are automatically generated :
+
+-- a *DESCRIPTION* file : informations like authors, version, license and libraries to import are in it.
+
+-- a *NAMESPACE* file : here are established functions that can be run by the user and functions from libraries that will be used in the package.
+
+-- a *.gitignore* file : you indicate if there are files (test scripts or development notes) that you don't want to be in the final package.
+
+-- a *R/* folder : all the R scripts that constitute the package must be put here.
+
+
+
+## Tools for the presentation
+
+In the case of the `speciesatlas` package, we needed to include *.Rnw* and *.Rmd* files, but it's impossible to place them in the *R/* folder. The tip is to put all these non-R files in a *inst/* folder: actually every file in this folder will remain untouched while the installation of the package. It is later possible to access these files with the R command `system.file`. Afterthat, it is important to add a *README.md* file and a *man/* folder containing a *.md* file for every function accessible for the user. The *README.md* file must present the package and explain how to use it : it is the front page on the *Github repository*. The *.md* files explain in details the arguments needed by the function and its output. 
+
+
+
+`library(devtools)`
+
+`devtools::install_github("AurelienBIM/speciesatlas")`
+
+`library(speciesatlas)`
+
+
+It only is with those few lines of R code that the package can be downloaded and installed. When the package is ran, the output can take 2 different forms. It's the user's job to specify which one he wants. Thanks to some files coded in Sweave and the `knitr` package [@knitr], there can be a *PDF* output. We also added a `Bookdown` [@bookdown] output : this is a package using the `R Markdown` language to create interactive books. It produce multiple HTML pages and can easily be turned in a website. 

@@ -1,0 +1,19 @@
+# 4. Discussion
+
+## Applications
+
+utilité pour les gestionnaires de site car :
+- travail sur des milliers d'espèces en un coup
+- quantification et état des lieux de la biodiversité
+- fiche synthétique par espèce
+- possible de faire des cartes/indices de biodiv ou d'avoir une liste d'espèces présentes dans une zone donnée.
+
+## Limitations
+
+moins souple que Biomod mais plus simple d'accès et information synthétique en ayant tout de même des résultats scientifiques quand même poussés
+on pourrait ajouter le couvert forestier, et différencier les variables par taxon.
+
+## Perspectives
+
+fonctions à rajouter
+ne plus travailler par espèce mais par communauté
