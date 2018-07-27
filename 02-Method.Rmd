@@ -51,19 +51,25 @@ The package uses `BIOMOD2` for the technical part. It only takes its advantage a
 
 ## Effectiveness indicators
 
-To verify the truthfulness of the models' calculus, other functionalities of `BIOMOD2` can be used. The function `Find.Optim.Stat` offers several effectiveness indicators [@effectiveness] than help to evaluate the results. For the first 4 indicators, the more the values are close to 1, the best the functioning is. And for the 2 last, the best possible value is 100%. Among them, the following were chosen :
+|Predicted / Observed|Presence|Absence |Total   |
+|:------------------:|:------:|:------:|:------:|
+|Presence            |$n_{11}$|$n_{01}$|$n_{.1}$|
+|Absence             |$n_{10}$|$n_{00}$|$n_{.0}$|
+|Total               |$n_{1.}$|$n_{0.}$|n       |
 
--- *Relative Operating Characteristic (ROC)* : evaluates the models using the Area Under the Curve (AUC)
+To verify the truthfulness of the models' calculus, other functionalities of `BIOMOD2` can be used. The function `Find.Optim.Stat` offers several effectiveness indicators [@effectiveness] than help to evaluate the results. Some of the effectiveness indicators relies on the exploitation of the *confusion matrix* [@accuracy]. We say that they are threshold-dependent because they need binary variables. Therefore the threshold is the most important parameter in those cases. The confusion matrix is a table that confronts the predicted and the observed results, and there is an example above. For every indicator, the goal is to be as close as possible to 1 or 100%. We chose the following ones :
 
--- *Accuracy (OA)*
+-- *Relative Operating Characteristic (ROC)* : it is a threshold-independent indicator.That means that the values don't need to be binarized, it works on continuous prediction. It evaluates the models using the Area Under the receiver operating characteristic Curve (AUC). It's one of the index the most used in statistic, and also in Species Distribution Modelling (SDM).
 
--- *True Skill Statistic (TSS)*
+-- *Accuracy (OA)* : it is threshold-dependent, and evaluates how many cases had been correctly classify with the following equation : $OA = (n_{11} + n_{00})/n$
 
--- *KAPPA (K)* 
+-- *True Skill Statistic (TSS)* : depends a lot on Sensitivity and Specificity because its formula is : $TSS = Sen. + Spe. - 1$. It is defined as the average of the net prediction success rate for both presence and absence sites.
 
--- *Sensitivity (Sen.)* : fraction of the true positive
+-- *KAPPA (K)* : this is a way to "normalize" the accuracy, to take in consideration the relative part of its results. Accuracy tends to overestimate the values. It's calculated with : $K = (OA-A)/(1-A)$ where $A=(n_{11}*n_{11}+n_{01}*n_{10})/n^{2}$ 
 
--- *Specificity (Spe.)* : fraction of the true negative
+-- *Sensitivity (Sen.)* : probability of making a right prediction on the presence of a species (true positive). It's calculated with : $Sen. = n_{11}/n_{1.}$
+
+-- *Specificity (Spe.)* : probability of making a right prediction on the absence of a species (true negative). It's calculated with : $Sen. = n_{11}/n_{1.}$
 
 ## Structure of the code
 

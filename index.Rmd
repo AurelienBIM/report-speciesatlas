@@ -63,9 +63,7 @@ opts_chunk$set(echo=FALSE, cache=FALSE,
 
 # Foreword {-}
 
-The production of a biodiversity atlas is part of the *BioSceneMada project* [@Vieilledent2018], led by both the *CIRAD* and *EtcTerra*. This project started in 2014 and its aim is to evaluate the biodiversity scenarios under the effect of climate change and future deforestation in Madagascar. *EtcTerra* is the association where i am doing my internship. Most of its employees comes from the Yann Arthus-Bertrand's *GoodPlanet* Foundation. They were part of the *Carbon Action* programme, and in 2012 they created their own association in full collaboration with *GoodPlanet*. They are engaged in several countries of Africa, such as Madagascar, Mozambique, Mali, Ivory Coast ... The main mission of *EtcTerra* is to lead projects that preserve the environment while contributing to the local economy. In the beginning of the year, *EtcTerra* and *Rongead* merged to become *Nitidae*. 
-
-If the subject of my internship was only to work on Madagascar's biodiversity, it changed a little as I was working in Montpellier. Actually the R script relative to Madagascar became a R package compatible with every given area. 
+This report was written during my 3 month internship in the association *EtcTerra*. This internship was part of my fourth year of taking engineer classes at *INSA Lyon*. If the subject of my internship was only to work on Madagascar's biodiversity, it changed a little as I was working in Montpellier. The result of my work finally is a R package compatible with every given area called *speciesatlas*. More informations about *EtcTerra* and the whole *BioSceneMada* project can be found at the end of the report in the Annex section.
 
 ```{r cc-license}
 knitr::include_graphics("figures/by-sa.png")

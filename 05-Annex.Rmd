@@ -1,0 +1,6 @@
+# Annex
+
+The production of a biodiversity atlas is part of the *BioSceneMada project* [@Vieilledent2018], led by both the *CIRAD* and *EtcTerra*. This project started in 2014 and its aim is to evaluate the biodiversity scenarios under the effect of climate change and future deforestation in Madagascar. *EtcTerra* is the association where i am doing my internship. Most of its employees comes from the Yann Arthus-Bertrand's *GoodPlanet* Foundation. They were part of the *Carbon Action* programme, and in 2012 they created their own association in full collaboration with *GoodPlanet*. They are engaged in several countries of Africa, such as Madagascar, Mozambique, Mali, Ivory Coast ... The main mission of *EtcTerra* is to lead projects that preserve the environment while contributing to the local economy. In the beginning of the year, *EtcTerra* and *Rongead* merged to become *Nitidae*.
+
+
+# References
