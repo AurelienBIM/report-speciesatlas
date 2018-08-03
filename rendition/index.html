@@ -150,6 +150,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="discussion.html"><a href="discussion.html#limitations"><i class="fa fa-check"></i>Limitations</a></li>
 <li class="chapter" data-level="" data-path="discussion.html"><a href="discussion.html#perspectives"><i class="fa fa-check"></i>Perspectives</a></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="annex.html"><a href="annex.html"><i class="fa fa-check"></i>Annex</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -175,17 +176,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="foreword" class="section level1 unnumbered">
 <h1>Foreword</h1>
-<p>The production of a biodiversity atlas is part of the <em>BioSceneMada project</em> <span class="citation">(Vieilledent <em>et al.</em> <a href="#ref-Vieilledent2018">2018</a>)</span>, led by both the <em>CIRAD</em> and <em>EtcTerra</em>. This project started in 2014 and its aim is to evaluate the biodiversity scenarios under the effect of climate change and future deforestation in Madagascar. <em>EtcTerra</em> is the association where i am doing my internship. Most of its employees comes from the Yann Arthus-Bertrand’s <em>GoodPlanet</em> Foundation. They were part of the <em>Carbon Action</em> programme, and in 2012 they created their own association in full collaboration with <em>GoodPlanet</em>. They are engaged in several countries of Africa, such as Madagascar, Mozambique, Mali, Ivory Coast … The main mission of <em>EtcTerra</em> is to lead projects that preserve the environment while contributing to the local economy. In the beginning of the year, <em>EtcTerra</em> and <em>Rongead</em> merged to become <em>Nitidae</em>.</p>
-<p>If the subject of my internship was only to work on Madagascar’s biodiversity, it changed a little as I was working in Montpellier. Actually the R script relative to Madagascar became a R package compatible with every given area.</p>
+
+<div class="figure" style="text-align: center"><span id="fig:cov"></span>
+<img src="figures/lemurs.cover.png" alt="A species of lemurs living in Madagascar : the Lemur cata (Credits : Santiago Urquijo/Getty)." width="\textwidth" />
+<p class="caption">
+Figure 1: A species of lemurs living in Madagascar : the <strong>Lemur cata</strong> (Credits : Santiago Urquijo/Getty).
+</p>
+</div>
+<p>This report was written during my 3 month internship in the association <em>EtcTerra</em>. This internship was part of my fourth year of taking engineer classes at <em>INSA Lyon</em>. If the subject of my internship was only to work on Madagascar’s biodiversity (Img. <a href="index.html#fig:cov">1</a>), it changed a little while I was working in Montpellier. The result of my work finally is a R package called <em>speciesatlas</em> and is compatible with every given area. More informations about <em>EtcTerra</em> and the whole <em>BioSceneMada</em> project can be found at the end of the report in the Annex section.</p>
 <p><img src="figures/by-sa.png" width="202" style="display: block; margin: auto;" /></p>
 <p>This report is licensed under the <a href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 
-</div>
-<h3>References</h3>
-<div id="refs" class="references">
-<div id="ref-Vieilledent2018">
-<p>Vieilledent, G., Allnutt, T.F., Grinand, C., Pedrono, M., Razafimpahanana, A. &amp; Rakotoarijaona, J.-R. (2018) <em>Scientific Result Report for the Frb Bioscenemada Project</em>. Cirad, ETC Terra, WCS Madagascar, Office National de l’Environnement.</p>
-</div>
 </div>
             </section>
 
@@ -236,6 +237,19 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

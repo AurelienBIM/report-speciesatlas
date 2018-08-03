@@ -21,7 +21,7 @@ for (sp in 1:2){
 df.orig # Input data must be this form
 ```
 
-In addition to this list of dataframes, the package needs environmental and climatic datas about the place of interest. These can be passed in a *.TIF* file containing a raster for every variable of the study. Since the package offers distribution predictions for both present and future, several  rasterstacks are involved . A contemporary one is enough but some future's are needed. The package require a rasterstack for every different representative concentration pathways (RCP), global climate models (GCM) and year of prediction. 
+In addition to this list of dataframes, the package needs environmental and climatic datas about the place of interest. These can be passed in a *.TIF* file containing a raster for every variable of the study. Since the package offers distribution predictions for both present and future, several  rasterstacks are involved. A contemporary one is enough but some future's are needed. The package require a rasterstack for every different representative concentration pathways (RCP), global climate models (GCM) and year of prediction. 
 
 ```{r echo=FALSE, results='asis',message=FALSE,warning=FALSE}
 library(raster)
@@ -37,7 +37,7 @@ environ # This is an exemple of rasterstack for the present.
 
 Under a certain number of individuals for a given species, it is quite absurd to run models on it. It may theoretically make the calculus but the results would have no sense. After some experimentations, we decided to set this number to 10. It indeed removes a lot of species but we could have not make any interpretation on them.
 
-The package uses `BIOMOD2` for the technical part. It only takes its advantage and not its default, because the parameters are already set in `speciesatlas`. Each model returns a binary response for a presence at a specific location, and that is why having several models is so important to predict presence probability. The model averaging is quite simple, it was decided that if 3 models on 5 indicate a presence, we could consider it as well. We chose 5 models of `BIOMOD2` that were complementary and offer a solid adaptation to the diverstity of the data input. Those are :
+The package uses `BIOMOD2` for the technical part. It only takes its advantage and not its default, because the parameters are already set in `speciesatlas`. Each model returns a binary response for a presence at a specific location, and that is why having several models is so important to predict presence probability. The model averaging is quite simple, it was decided that if 3 models on 5 indicate a presence, we could consider it as well. We chose those 5 models of `BIOMOD2` :
 
 -- *Generalized Linear Model (GLM)* : it is an adaptable generalization of the linear regression. It allows to connect the linear model to the response variable with a link function. That function is *logit* in the package. That model is very general and can suit to most of the cases.
 
@@ -49,13 +49,18 @@ The package uses `BIOMOD2` for the technical part. It only takes its advantage a
 
 -- *Artificial Neural Network (ANN)* : this model is inspired from brains' neural network, it means that it is learning task after task. It's interesting to have this model in the package because of its complementarity with the others.
 
+Eventually, we have a parametric model (GLM) that is very constrained, a non-parametric model (GAM) and 3 others machine learning models. All of them have pro and cons, like overparametrization but we think that this set of models offers a good complementarity and can adapt
+to the large diverstity of the data input.
+
+\pagebreak
+
 ## Effectiveness indicators
 
 |Predicted / Observed|Presence|Absence |Total   |
 |:------------------:|:------:|:------:|:------:|
 |Presence            |$n_{11}$|$n_{01}$|$n_{.1}$|
 |Absence             |$n_{10}$|$n_{00}$|$n_{.0}$|
-|Total               |$n_{1.}$|$n_{0.}$|n       |
+|Total               |$n_{1.}$|$n_{0.}$|$n$     |
 
 To verify the truthfulness of the models' calculus, other functionalities of `BIOMOD2` can be used. The function `Find.Optim.Stat` offers several effectiveness indicators [@effectiveness] than help to evaluate the results. Some of the effectiveness indicators relies on the exploitation of the *confusion matrix* [@accuracy]. We say that they are threshold-dependent because they need binary variables. Therefore the threshold is the most important parameter in those cases. The confusion matrix is a table that confronts the predicted and the observed results, and there is an example above. For every indicator, the goal is to be as close as possible to 1 or 100%. We chose the following ones :
 
@@ -97,7 +102,7 @@ After talking about the substance of the package by studying its technical part,
 
 ## Creation of a R package
 
-Creating a R package was in actual fact a brand new thing for me. A lot of online tutorials helped me to achieve this task, but the main library that I used was `Devtools`. The first step for the creation is the command `devtools::create("package.name")` : it creates the basic architecture of the package, also called the skeleton. The following files are automatically generated :
+Creating a R package was actually a brand new thing for me. The structure of the package is visible on Fig. \@ref(fig:dir). A lot of online tutorials helped me to achieve this task, but the main library that I used was `Devtools`. The first step for the creation is the command `devtools::create("package.name")` : it creates the basic architecture of the package, also called the skeleton. The following files are automatically generated :
 
 -- a *DESCRIPTION* file : informations like authors, version, license and libraries to import are in it.
 
@@ -107,7 +112,15 @@ Creating a R package was in actual fact a brand new thing for me. A lot of onlin
 
 -- a *R/* folder : all the R scripts that constitute the package must be put here.
 
+-- a *inst/* folder : if the package needs other files than R scripts like images or R markdown files, they must be put in this folder. If a file is not in this folder, it won't be retained during the installation of the package. 
 
+-- a *man/* folder : Here are stored the manual files, coded in Markdown. They are explaining the different functions and the package in general. It is what you see when you type `?speciesatlas` or `help(speciesatlas)`.
+
+(ref:cap-dir) Structure of the `speciesatlas` package.
+
+```{r dir, echo=FALSE, out.width="\\textwidth", fig.cap="(ref:cap-dir)"}
+knitr::include_graphics("figures/directory.png")
+```
 
 ## Tools for the presentation
 

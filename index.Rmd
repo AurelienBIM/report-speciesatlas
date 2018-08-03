@@ -63,7 +63,13 @@ opts_chunk$set(echo=FALSE, cache=FALSE,
 
 # Foreword {-}
 
-This report was written during my 3 month internship in the association *EtcTerra*. This internship was part of my fourth year of taking engineer classes at *INSA Lyon*. If the subject of my internship was only to work on Madagascar's biodiversity, it changed a little as I was working in Montpellier. The result of my work finally is a R package compatible with every given area called *speciesatlas*. More informations about *EtcTerra* and the whole *BioSceneMada* project can be found at the end of the report in the Annex section.
+(ref:cap-cov) A species of lemurs living in Madagascar : the **Lemur cata** (Credits : Santiago Urquijo/Getty).
+
+```{r cov, echo=FALSE, out.width="\\textwidth", fig.cap="(ref:cap-cov)"}
+knitr::include_graphics("figures/lemurs.cover.png")
+```
+
+This report was written during my 3 month internship in the association *EtcTerra*. This internship was part of my fourth year of taking engineer classes at *INSA Lyon*. If the subject of my internship was only to work on Madagascar's biodiversity (Img. \@ref(fig:cov)), it changed a little while I was working in Montpellier. The result of my work finally is a R package called *speciesatlas* and is compatible with every given area. More informations about *EtcTerra* and the whole *BioSceneMada* project can be found at the end of the report in the Annex section.
 
 ```{r cc-license}
 knitr::include_graphics("figures/by-sa.png")

@@ -150,6 +150,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="discussion.html"><a href="discussion.html#limitations"><i class="fa fa-check"></i>Limitations</a></li>
 <li class="chapter" data-level="" data-path="discussion.html"><a href="discussion.html#perspectives"><i class="fa fa-check"></i>Perspectives</a></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="annex.html"><a href="annex.html"><i class="fa fa-check"></i>Annex</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -172,33 +173,550 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1>3. Results</h1>
 <div id="context-of-our-tests" class="section level2">
 <h2>Context of our tests</h2>
-<p>In this project, the area on which we tested the package was the whole island of Madagascar. We chose this area to be in accordance with the project but the package is fully adaptable to other places. Madagascar is very interesting to study in this context because of its rich and abundant biodiversity. Not only there is many species of animals or vegetation but a lot of these are endemic to the isle. Among all the country we could have the necessary data, Madagascar may be the best example. The datas used in the project come from the <em>REBIOMA</em> <strong>(SOURCE?)</strong> project that collected a lot of observations of the biodiversity in the whole island of Madagascar. Two of the dataset used in the tests are coming from there : one for baobabs and one for lemurs. To push the tests a little further, we also added data for birds coming from <em>eBird</em>. In the end we tested the package on 362 different species (8 of boababs, 71 of lemurs, 283 of birds).</p>
-<p>To run the models, we chose 5 climatic and environmental variables. This choice is crucial because the results rely directly on it. We were looking for variables that were the least correlate but though the most complete. One important point to choose these ones was that they are easily interpretable.</p>
+<p>In this project, the area on which we tested the package was the whole island of Madagascar. We chose this area to be in accordance with the project but the package is fully adaptable to other places. Madagascar is very interesting to study in this context because of its rich and abundant biodiversity. Not only there is many species of animals or vegetation but a lot of these are endemic to the isle. Among all the country we could have the necessary data, Madagascar may be the best example. The datas used in the project come from the <em>REBIOMA</em> (<a href="http://www.rebioma.net/" class="uri">http://www.rebioma.net/</a>) project that collected a lot of observations of the biodiversity in the whole island of Madagascar. Two of the dataset used in the tests are coming from there : one for baobabs and one for lemurs. To push the tests a little further, we also added data for birds coming from <em>eBird</em> and reptiles from <em>Cirad</em>. In the end we tested the package on hundreds of species (8 of boababs, 71 of lemurs, 283 of birds and hundreds of reptiles).</p>
+<p>To run the models, we need climatic and environmental variables. Our datas are coming from <em>MadaClim</em> (<a href="https://madaclim.cirad.fr/" class="uri">https://madaclim.cirad.fr/</a>). This site is a product of the <em>Bioscenemada</em> project that gather the information of <em>WorldClim</em> relative to Madagascar. The data is stored as <em>.tif</em> file and contains layers for the different studied variables, with a 1km precision all over the island. There are current datas (based on observation from 1950 to 2000) but also several future datas, one for every scenario we choose. The choice of the variables to run the models on is crucial because the results rely directly on it. We were looking for variables that were the least correlate but though the most complete. One important point to choose these ones (Fig. <a href="results.html#fig:var">3</a>) was that they are easily interpretable.</p>
 <p>– <em>Annual Mean Temperature (temp)</em></p>
-<p>– <em>Temperature Seasonability (tseas)</em></p>
+<p>– <em>Temperature Seasonability (tseas)</em> : quantify the variation of the temperature over the seasons. The lowest it is, the least temperature’s change there is.</p>
 <p>– <em>Annual Precipitation (prec)</em></p>
-<p>– <em>Climatic Water Deficit (cwd)</em></p>
+<p>– <em>Annual Climatic Water Deficit (cwd)</em> : for a given month, if there is less precipitation than <em>evapotranspiration (pet)</em>, we can say that there is a climatic water deficit. This number is calculated with the following equation : <span class="math inline">\(cwd=-\sum_{i} min(prec_{i} - pet_{i},0)\)</span>, where <span class="math inline">\(i\)</span> takes the value of the twelve months of the year.</p>
 <p>– <em>Altitude (alt)</em></p>
-<p>Afterthat we had to choose which future scenarios to study. It was important to have several predictions but not to much either otherwise the calculus time would have been too high. So we favoured the following scenarios :</p>
-<p>– for <em>Representative Concentration Pathways</em> : RCP4.5 and RCP8.5. These numbers are W/m<sup>2</sup>, they correspond to scenarios of the planet warming.</p>
-<p>– for <em>Global Climate Models</em> : <em>Community Climate System Model (CCSM4)</em> <span class="citation">(Gent <em>et al.</em> <a href="#ref-CCSM4">2011</a>)</span>, <em>Goddard Institute for Space Studies Model E version 2 with Russell ocean model (GISS-E2-R)</em> <span class="citation">(Nazarenko <em>et al.</em> <a href="#ref-GISS-E2-R">2013</a>)</span> and <em>Hadley Global Environment Model 2 - Earth System (HadGEM2-ES)</em> <span class="citation">(Office <a href="#ref-HadGEM2-ES">2016</a>)</span>.</p>
-<p>– for <em>years</em> : 2050 and 2080.</p>
+
+<div class="figure" style="text-align: center"><span id="fig:var"></span>
+<img src="figures/current.png" alt="The variables we chose for our study." width="\textwidth" />
+<p class="caption">
+Figure 3: The variables we chose for our study.
+</p>
+</div>
+<p>Afterthat we had to choose which future scenarios to study. It was important to have several predictions but not too much either otherwise the calculus time would have been very high. Here are the scenarios we favoured <span class="citation">(Vieilledent <em>et al.</em> <a href="#ref-Vieilledent2016">2016</a>)</span> :</p>
+<p>– for <em>Representative Concentration Pathways</em>. RCPs are 4 scenarios that the <em>Intergovernmental Panel on Climate Change (IPCC)</em> adopted for its fifth Assessment Report (AR5). There is RCP2.6, RCP4.5, RCP6 and RCP8.5. THe numbers in the RCPs’ names are greenhouse gas concentration expressed in W/m<sup>2</sup>, it stands for the trajectory of the planet’s warming. We chose RCP4.5 and RCP8.5, two RCPs that are giving a good overview without burdening too much the time of running. RCP4.5 means that the emmission peak would be around 2040 and afterthat it would decline. RCP8.5 considers that emmissions will keep rising for the whole century.</p>
+<p>– for <em>Global Climate Models</em><span class="citation">(Stute, Clement &amp; Lohmann <a href="#ref-Stute2001">2001</a>)</span>. A GCMs depicts the physical processes that happen at any level of the Earth (land surface, ocean, atmosphere or above …). Based on the <em>Navier Stokes</em> equations, they are often used for weather forecasting. We chose <em>Community Climate System Model (CCSM4)</em> <span class="citation">(Gent <em>et al.</em> <a href="#ref-CCSM4">2011</a>)</span>, <em>Goddard Institute for Space Studies Model E version 2 with Russell ocean model (GISS-E2-R)</em> <span class="citation">(Nazarenko <em>et al.</em> <a href="#ref-GISS-E2-R">2013</a>)</span> and <em>Hadley Global Environment Model 2 - Earth System (HadGEM2-ES)</em> <span class="citation">(Office <a href="#ref-HadGEM2-ES">2016</a>)</span>.</p>
+<p>– for <em>years</em>. We decided to choose 2050 and 2080.</p>
 </div>
 <div id="content-of-an-atlas-page" class="section level2">
 <h2>Content of an atlas page</h2>
-<p>Now we’re gonna describe the different items that constitute an atlas page. As said before the output can be <em>HTML</em> or <em>PDF</em> but the content is strictly the same for both of the mediums. On top of the page there is the name of the species, its taxonomy with the kingdom and the family. When available there’s also the authority (name and year) and the IUCN status. It is an endangerment indicators for every species, with different levels of threat like <em>Least Concern</em> (LC), <em>Vulnerable</em> (VU) or <em>Critically Endangered</em> (CR). Below these, there are descriptive image and text (when available) that helps to know which species it is about if its name is not evocative enough. A link to the corresponding <em>Encyclopedia of Life</em> page is given for every species. The first map on the top left is showing all the occurences of the species with the map of the area for background. The number of occurences for the species is written on the right of the maps.</p>
-<p>Every species have those items in common, but the presence of the other informations depend on the number of occurences for the species. We saw that earlier, we chose not to run the models if the species presented less than 10 observations. For those species, there isn’t anything else on the atlas page. For other species with enough inidividuals, the results of the models are presented over several maps and tables. The second map is showing the binary vote for every model concerning the presence of the species. If 3 models or more are considering the presence on a pixel, we admit the species is present there, and it is colored in green on the map. The sum of these presences gives us the <em>Species distribution area</em>, which is the predicted number of km<sup>2</sup> with at least one presence of the species. Also there is a table that shows the values for the effectiveness indicators that were presented earlier.</p>
-<p>On the following section, the graph on the left is presenting the relation between <em>Annual precipitation</em> and <em>Mean annual temperature</em> : every species is marked by a dot at the intersection of its value for the two variables. It allows us to see if the species only live under certain conditions. For most of the species, those climatic niches are relatively gathered. On the right of this section, there’s firstly a table that informs us on the environmental tendancy for places where individuals of the species where detected. There are the mean and quantiles for every variable studied, it gives an idea on the environment this species need. The second table gives information on the importance of the climatic variables. In other words it designates which are the variables that are conditioning the most the presence of the species. We can read the results for every 5 models of <code>BIOMOD2</code>, and there’s a synthesis on the two last columns.</p>
-<p>The last section of the page is presenting the results obtained for the different future scenarios. The two maps on the left are the extreme cases (RCP8.5 and 2080) with or without dispersion. There’s 15 levels on the legend because of the 5 models and the 3 GCMs. For every GCM we have the binary response for every distribution model. That time we consider the species present on a pixel if at least 8 out of 15 answers are positive. Summing these pixels provides us the new <em>Species distribution area</em> for this scenario, and we can measure the percentage of variation relative to the projections for the present. Those informations are in the two last columns of the table.</p>
+
+<div class="figure" style="text-align: center"><span id="fig:head"></span>
+<img src="figures/head.png" alt="Example of the top of a page." width="\textwidth" />
+<p class="caption">
+Figure 4: Example of the top of a page.
+</p>
+</div>
+<p>Now we’re gonna describe the different items that constitute an atlas page. As said before the output can be <em>HTML</em> or <em>PDF</em> but the content is strictly the same for both of the mediums. On top of the page (Fig. <a href="results.html#fig:head">4</a>) there is the name of the species, its taxonomy with the kingdom and the family. When available there’s also the authority (name and year) and the IUCN status. It is an endangerment indicator for every species, with different levels of threat like <em>Least Concern</em> (LC), <em>Vulnerable</em> (VU) or <em>Critically Endangered</em> (CR). Below these, there are descriptive image and text (when available) that helps to know which species it is about if its name is not evocative enough. A link to the corresponding <em>Encyclopedia of Life</em> page is given for every species. The first map on the top left (Fig. <a href="results.html#fig:alt">5</a>) is showing all the occurences of the species with the map of the area for background. The number of occurences for the species is written on the right of the maps.</p>
+<p>Every species have those items in common, but the presence of the other informations depend on the number of occurences for the species. We saw that earlier, we chose not to run the models if the species presented less than 10 observations. For those species, there isn’t anything else on the atlas page. For other species with enough inidividuals, the results of the models are presented over several maps and tables. The second map (Fig. <a href="results.html#fig:ca">6</a>) is showing the binary vote for every model concerning the presence of the species. If 3 models or more are considering the presence on a pixel, we admit the species is present there, and it is colored in green on the map. The sum of these presences gives us the <em>Species distribution area</em>, which is the predicted number of km<sup>2</sup> with at least one presence of the species. Also there is a table (Tab. <a href="results.html#tab:perf">1</a>) that shows the values for the effectiveness indicators that were presented earlier.</p>
+<p>On the following section, the graph on the left (Fig. <a href="results.html#fig:niche">7</a>) is presenting the relation between <em>Annual precipitation</em> and <em>Mean annual temperature</em> : every species is marked by a dot at the intersection of its value for the two variables. It allows us to see if the species only live under certain conditions. For most of the species, those climatic niches are relatively gathered. On the right of this section, there’s firstly a table (Tab. <a href="results.html#tab:tab">2</a>) that informs us on the environmental tendancy for places where individuals of the species where detected. There are the mean and quantiles for every variable studied, it gives an idea on the environment this species need. The second table (Tab. <a href="results.html#tab:imp">3</a>) gives information on the importance of the climatic variables. In other words it designates which are the variables that are conditioning the most the presence of the species. We can read the results for every 5 models of <code>BIOMOD2</code>, and there’s a synthesis on the two last columns.</p>
+<p>The last section of the page is presenting the results obtained for the different future scenarios. The two maps on the left (Fig. <a href="results.html#fig:cafd">8</a>, <a href="results.html#fig:cazd">9</a>) are the extreme cases (RCP8.5 and 2080) with or without dispersion. There’s 15 levels on the legend because of the 5 models and the 3 GCMs. For every GCM we have the binary response for every distribution model. That time we consider the species present on a pixel if at least 8 out of 15 answers are positive. Summing these pixels provides us the new <em>Species distribution area</em> for this scenario, and we can measure the percentage of variation relative to the projections for the present. Those informations are in the two last columns of the table (Tab. <a href="results.html#tab:df">4</a>).</p>
+
+
+
+
+<table>
+<caption>
+<span id="tab:perf">Table 1: </span>Example of the table presenting the effectiveness indicators.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+ROC
+</th>
+<th style="text-align:center;">
+OA
+</th>
+<th style="text-align:center;">
+TSS
+</th>
+<th style="text-align:center;">
+K
+</th>
+<th style="text-align:center;">
+Sen
+</th>
+<th style="text-align:center;">
+Spe
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Value
+</td>
+<td style="text-align:center;">
+0.99
+</td>
+<td style="text-align:center;">
+0.95
+</td>
+<td style="text-align:center;">
+0.9
+</td>
+<td style="text-align:center;">
+0.24
+</td>
+<td style="text-align:center;">
+95.6
+</td>
+<td style="text-align:center;">
+90.02
+</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>
+<span id="tab:tab">Table 2: </span>Example of the table presenting the values of the chosen variables.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+temp
+</th>
+<th style="text-align:left;">
+tseas
+</th>
+<th style="text-align:left;">
+prec
+</th>
+<th style="text-align:left;">
+cwd
+</th>
+<th style="text-align:left;">
+alt
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Mean
+</td>
+<td style="text-align:left;">
+256
+</td>
+<td style="text-align:left;">
+2104
+</td>
+<td style="text-align:left;">
+965
+</td>
+<td style="text-align:left;">
+838
+</td>
+<td style="text-align:left;">
+59
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2.5%
+</td>
+<td style="text-align:left;">
+239
+</td>
+<td style="text-align:left;">
+1206
+</td>
+<td style="text-align:left;">
+394
+</td>
+<td style="text-align:left;">
+776
+</td>
+<td style="text-align:left;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+97.5%
+</td>
+<td style="text-align:left;">
+269
+</td>
+<td style="text-align:left;">
+2880
+</td>
+<td style="text-align:left;">
+1589
+</td>
+<td style="text-align:left;">
+936
+</td>
+<td style="text-align:left;">
+168
+</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>
+<span id="tab:imp">Table 3: </span>Example of the table presenting the importance of the variables.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+GLM
+</th>
+<th style="text-align:left;">
+GAM
+</th>
+<th style="text-align:left;">
+RF
+</th>
+<th style="text-align:left;">
+MaxE
+</th>
+<th style="text-align:left;">
+ANN
+</th>
+<th style="text-align:left;">
+mrank
+</th>
+<th style="text-align:left;">
+rank
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+temp
+</td>
+<td style="text-align:left;">
+0.47
+</td>
+<td style="text-align:left;">
+0.39
+</td>
+<td style="text-align:left;">
+0.40
+</td>
+<td style="text-align:left;">
+0.05
+</td>
+<td style="text-align:left;">
+0.10
+</td>
+<td style="text-align:left;">
+3.2
+</td>
+<td style="text-align:left;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+tseas
+</td>
+<td style="text-align:left;">
+0.46
+</td>
+<td style="text-align:left;">
+0.34
+</td>
+<td style="text-align:left;">
+0.50
+</td>
+<td style="text-align:left;">
+0.31
+</td>
+<td style="text-align:left;">
+0.52
+</td>
+<td style="text-align:left;">
+2.8
+</td>
+<td style="text-align:left;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+prec
+</td>
+<td style="text-align:left;">
+0.35
+</td>
+<td style="text-align:left;">
+0.09
+</td>
+<td style="text-align:left;">
+0.47
+</td>
+<td style="text-align:left;">
+0.60
+</td>
+<td style="text-align:left;">
+0.59
+</td>
+<td style="text-align:left;">
+3.0
+</td>
+<td style="text-align:left;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cwd
+</td>
+<td style="text-align:left;">
+0.74
+</td>
+<td style="text-align:left;">
+0.94
+</td>
+<td style="text-align:left;">
+0.74
+</td>
+<td style="text-align:left;">
+0.67
+</td>
+<td style="text-align:left;">
+0.73
+</td>
+<td style="text-align:left;">
+1.0
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>
+<span id="tab:df">Table 4: </span>Example of the table presenting the results for future predictions.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+RCP
+</th>
+<th style="text-align:left;">
+Year
+</th>
+<th style="text-align:left;">
+Disp
+</th>
+<th style="text-align:left;">
+Area
+</th>
+<th style="text-align:left;">
+Change
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:left;">
+2050
+</td>
+<td style="text-align:left;">
+full
+</td>
+<td style="text-align:left;">
+33742
+</td>
+<td style="text-align:left;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:left;">
+2050
+</td>
+<td style="text-align:left;">
+zero
+</td>
+<td style="text-align:left;">
+14345
+</td>
+<td style="text-align:left;">
+-56
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:left;">
+2080
+</td>
+<td style="text-align:left;">
+full
+</td>
+<td style="text-align:left;">
+37868
+</td>
+<td style="text-align:left;">
+17
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:left;">
+2080
+</td>
+<td style="text-align:left;">
+zero
+</td>
+<td style="text-align:left;">
+13318
+</td>
+<td style="text-align:left;">
+-59
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+85
+</td>
+<td style="text-align:left;">
+2050
+</td>
+<td style="text-align:left;">
+full
+</td>
+<td style="text-align:left;">
+7423
+</td>
+<td style="text-align:left;">
+-77
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+85
+</td>
+<td style="text-align:left;">
+2050
+</td>
+<td style="text-align:left;">
+zero
+</td>
+<td style="text-align:left;">
+1873
+</td>
+<td style="text-align:left;">
+-94
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+85
+</td>
+<td style="text-align:left;">
+2080
+</td>
+<td style="text-align:left;">
+full
+</td>
+<td style="text-align:left;">
+40648
+</td>
+<td style="text-align:left;">
+26
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+85
+</td>
+<td style="text-align:left;">
+2080
+</td>
+<td style="text-align:left;">
+zero
+</td>
+<td style="text-align:left;">
+10569
+</td>
+<td style="text-align:left;">
+-67
+</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+<div class="figure" style="text-align: center"><span id="fig:alt"></span>
+<img src="figures/alt.png" alt="Example of the map presenting the presences." width="35%" />
+<p class="caption">
+Figure 5: Example of the map presenting the presences.
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:ca"></span>
+<img src="figures/ca.png" alt="Example of the map presenting the results of the models." width="35%" />
+<p class="caption">
+Figure 6: Example of the map presenting the results of the models.
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:niche"></span>
+<img src="figures/niche.png" alt="Example of the climatic niche." width="35%" />
+<p class="caption">
+Figure 7: Example of the climatic niche.
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:cafd"></span>
+<img src="figures/cafd.png" alt="Example of the map for the extreme scenario with dispersion." width="35%" />
+<p class="caption">
+Figure 8: Example of the map for the extreme scenario with dispersion.
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:cazd"></span>
+<img src="figures/cazd.png" alt="Example of the map for the extreme scenario without dispersion." width="35%" />
+<p class="caption">
+Figure 9: Example of the map for the extreme scenario without dispersion.
+</p>
+</div>
 </div>
 <div id="exploitation-of-the-results" class="section level2">
 <h2>Exploitation of the results</h2>
-<p>With the projections of distribution that <code>BIOMOD2</code> is producing, it is possible to make some maps of specific richness, whether by taxon or with all of them.</p>
+<p>A prototype of the atlas is available at <strong><a href="http://etclab.org/atlas" class="uri">http://etclab.org/atlas</a></strong>. It was made with some species of the 4 taxons we run the models on, and it offers a good overview of the functionning of the atlas. With the projections of distribution that <code>BIOMOD2</code> is producing, it is possible to make some maps of specific richness by taxon. On the Fig. <a href="results.html#fig:lemurs">10</a>, <a href="results.html#fig:baobabs">11</a>, <a href="results.html#fig:birds">12</a> and <a href="results.html#fig:reptiles">13</a>, the different figures are standing for : <em>(a) current</em>, <em>(b) 45 and 2050</em>, <em>(c) 45 and 2080</em>, <em>(d) 85 and 2050</em> and <em>(e) 85 and 2080</em>.</p>
+<p>These maps help to identify the hotspots of species’ preservation. Comparing the current maps to the future ones gives a good indication on the species that are threatened. The most obvious example is the one of the lemurs : we can see that presently they’re living in the humid forests, east of Madagascar. In every future scenarios, the presence of the species invariably decreases, the last welcoming places for the lemurs being the heights of the mountains.</p>
 
-<div class="figure" style="text-align: center"><span id="fig:rich"></span>
-<img src="figures/richness.pdf" alt="Specific richness of Madagascar (with all the species we studied)."  />
+
+
+
+<div class="figure" style="text-align: center"><span id="fig:lemurs"></span>
+<img src="figures/lemurs.png" alt="Specific richness for the lemurs." width="\textwidth" />
 <p class="caption">
-Figure 1: Specific richness of Madagascar (with all the species we studied).
+Figure 10: Specific richness for the lemurs.
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:baobabs"></span>
+<img src="figures/baobabs.png" alt="Specific richness for the baobabs." width="\textwidth" />
+<p class="caption">
+Figure 11: Specific richness for the baobabs.
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:birds"></span>
+<img src="figures/birds.png" alt="Specific richness for the birds." width="\textwidth" />
+<p class="caption">
+Figure 12: Specific richness for the birds.
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:reptiles"></span>
+<img src="figures/reptiles.png" alt="Specific richness for the reptiles." width="\textwidth" />
+<p class="caption">
+Figure 13: Specific richness for the reptiles.
 </p>
 </div>
 
@@ -206,6 +724,12 @@ Figure 1: Specific richness of Madagascar (with all the species we studied).
 </div>
 <h3>References</h3>
 <div id="refs" class="references">
+<div id="ref-Vieilledent2016">
+<p>Vieilledent, G., Gardi, O., Grinand, C., Burren, C., Andriamanjato, M., Camara, C., Gardner, C., Glass, L., Rasolohery, A., Ratsimba, H.R., Gond, V. &amp; Rakotoarijaona, J.-R. (2016) Bioclimatic envelope models predict a decrease in tropical forest carbon stocks with climate change in madagascar., <strong>104</strong>, 703–715.</p>
+</div>
+<div id="ref-Stute2001">
+<p>Stute, M., Clement, A. &amp; Lohmann, G. (2001) Global climate models: Past, present, and future.</p>
+</div>
 <div id="ref-CCSM4">
 <p>Gent, P., Danabasoglu, G., Donner, L., M. Holland, M., C. Hunke, E., Jayne, S., Lawrence, D., B. Neale, R., Rasch, P., Vertenstein, M., H. Worley, P., Yang, Z.-L. &amp; Zhang, M. (2011) The community climate system model version 4., <strong>24</strong>, 4973–4991.</p>
 </div>
@@ -265,6 +789,19 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

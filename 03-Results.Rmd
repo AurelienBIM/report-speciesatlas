@@ -2,42 +2,108 @@
 
 ## Context of our tests
 
-In this project, the area on which we tested the package was the whole island of Madagascar. We chose this area to be in accordance with the project but the package is fully adaptable to other places. Madagascar is very interesting to study in this context because of its rich and abundant biodiversity. Not only there is many species of animals or vegetation but a lot of these are endemic to the isle. Among all the country we could have the necessary data, Madagascar may be the best example. The datas used in the project come from the *REBIOMA* **(SOURCE?)** project that collected a lot of observations of the biodiversity in the whole island of Madagascar. Two of the dataset used in the tests are coming from there : one for baobabs and one for lemurs. To push the tests a little further, we also added data for birds coming from *eBird*. In the end we tested the package on 362 different species (8 of boababs, 71 of lemurs, 283 of birds).
+In this project, the area on which we tested the package was the whole island of Madagascar. We chose this area to be in accordance with the project but the package is fully adaptable to other places. Madagascar is very interesting to study in this context because of its rich and abundant biodiversity. Not only there is many species of animals or vegetation but a lot of these are endemic to the isle. Among all the country we could have the necessary data, Madagascar may be the best example. The datas used in the project come from the *REBIOMA* (http://www.rebioma.net/) project that collected a lot of observations of the biodiversity in the whole island of Madagascar. Two of the dataset used in the tests are coming from there : one for baobabs and one for lemurs. To push the tests a little further, we also added data for birds coming from *eBird* and reptiles from *Cirad*. In the end we tested the package on hundreds of species (8 of boababs, 71 of lemurs, 283 of birds and hundreds of reptiles).
 
-To run the models, we chose 5 climatic and environmental variables. This choice is crucial because the results rely directly on it. We were looking for variables that were the least correlate but though the most complete. One important point to choose these ones was that they are easily interpretable.
+To run the models, we need climatic and environmental variables. Our datas are coming from *MadaClim* (https://madaclim.cirad.fr/). This site is a product of the *Bioscenemada* project that gather the information of *WorldClim* relative to Madagascar. The data is stored as *.tif* file and contains layers for the different studied variables, with a 1km precision all over the island. There are current datas (based on observation from 1950 to 2000) but also several future datas, one for every scenario we choose. The choice of the variables to run the models on is crucial because the results rely directly on it. We were looking for variables that were the least correlate but though the most complete. One important point to choose these ones (Fig. \@ref(fig:var)) was that they are easily interpretable.
 
 -- *Annual Mean Temperature (temp)*
 
--- *Temperature Seasonability (tseas)*
+-- *Temperature Seasonability (tseas)* : quantify the variation of the temperature over the seasons. The lowest it is, the least temperature's change there is. 
 
 -- *Annual Precipitation (prec)*
 
--- *Climatic Water Deficit (cwd)*
+-- *Annual Climatic Water Deficit (cwd)* : for a given month, if there is less precipitation than *evapotranspiration (pet)*, we can say that there is a climatic water deficit. This number is calculated with the following equation : $cwd=-\sum_{i} min(prec_{i} - pet_{i},0)$, where $i$ takes the value of the twelve months of the year.  
 
 -- *Altitude (alt)*
 
-Afterthat we had to choose which future scenarios to study. It was important to have several predictions but not to much either otherwise the calculus time would have been too high. So we favoured the following scenarios :
+(ref:cap-var) The variables we chose for our study.
 
--- for *Representative Concentration Pathways* : RCP4.5 and RCP8.5. These numbers are W/m^2^, they correspond to scenarios of the planet warming.   
+```{r var, echo=FALSE, out.width="\\textwidth", fig.cap="(ref:cap-var)"}
+knitr::include_graphics("figures/current.png")
+```
 
--- for *Global Climate Models* : *Community Climate System Model (CCSM4)* [@CCSM4], *Goddard Institute for Space Studies Model E version 2 with Russell ocean model (GISS-E2-R)* [@GISS-E2-R] and *Hadley Global Environment Model 2 - Earth System (HadGEM2-ES)* [@HadGEM2-ES].
+Afterthat we had to choose which future scenarios to study. It was important to have several predictions but not too much either otherwise the calculus time would have been very high. Here are the scenarios we favoured [@Vieilledent2016] :
 
--- for *years* : 2050 and 2080.
+-- for *Representative Concentration Pathways*. RCPs are 4 scenarios that the *Intergovernmental Panel on Climate Change (IPCC)* adopted for its fifth Assessment Report (AR5). There is RCP2.6, RCP4.5, RCP6 and RCP8.5. THe numbers in the RCPs' names are greenhouse gas concentration expressed in W/m^2^, it stands for the trajectory of the planet's warming. We chose RCP4.5 and RCP8.5, two RCPs that are giving a good overview without burdening too much the time of running. RCP4.5 means that the emmission peak would be around 2040 and afterthat it would decline. RCP8.5 considers that emmissions will keep rising for the whole century.  
+
+-- for *Global Climate Models*[@Stute2001]. A GCMs depicts the physical processes that happen at any level of the Earth (land surface, ocean, atmosphere or above ...). Based on the *Navier Stokes* equations, they are often used for weather forecasting. We chose *Community Climate System Model (CCSM4)* [@CCSM4], *Goddard Institute for Space Studies Model E version 2 with Russell ocean model (GISS-E2-R)* [@GISS-E2-R] and *Hadley Global Environment Model 2 - Earth System (HadGEM2-ES)* [@HadGEM2-ES].
+
+-- for *years*. We decided to choose 2050 and 2080.
 
 
 ## Content of an atlas page
 
-Now we're gonna describe the different items that constitute an atlas page. As said before the output can be *HTML* or *PDF* but the content is strictly the same for both of the mediums. On top of the page there is the name of the species, its taxonomy with the kingdom and the family. When available there's also the authority (name and year) and the IUCN status. It is an endangerment indicator for every species, with different levels of threat like *Least Concern* (LC), *Vulnerable* (VU) or *Critically Endangered* (CR). Below these, there are descriptive image and text (when available) that helps to know which species it is about if its name is not evocative enough. A link to the corresponding *Encyclopedia of Life* page is given for every species. The first map on the top left is showing all the occurences of the species with the map of the area for background. The number of occurences for the species is written on the right of the maps.
+(ref:cap-head) Example of the top of a page.
 
-Every species have those items in common, but the presence of the other informations depend on the number of occurences for the species. We saw that earlier, we chose not to run the models if the species presented less than 10 observations. For those species, there isn't anything else on the atlas page. For other species with enough inidividuals, the results of the models are presented over several maps and tables. The second map is showing the binary vote for every model concerning the presence of the species. If 3 models or more are considering the presence on a pixel, we admit the species is present there, and it is colored in green on the map. The sum of these presences gives us the *Species distribution area*, which is the predicted number of km^2^ with at least one presence of the species. Also there is a table that shows the values for the effectiveness indicators that were presented earlier. 
+```{r head, echo=FALSE, out.width="\\textwidth", fig.cap="(ref:cap-head)"}
+knitr::include_graphics("figures/head.png")
+```
 
-On the following section, the graph on the left is presenting the relation between *Annual precipitation* and *Mean annual temperature* : every species is marked by a dot at the intersection of its value for the two variables. It allows us to see if the species only live under certain conditions. For most of the species, those climatic niches are  relatively gathered. On the right of this section, there's firstly a table that informs us on the environmental tendancy for places where individuals of the species where detected. There are the mean and quantiles for every variable studied, it gives an idea on the environment this species need. The second table gives information on the importance of the climatic variables. In other words it designates which are the variables that are conditioning the most the presence of the species. We can read the results for every 5 models of `BIOMOD2`, and there's a synthesis on the two last columns.
+Now we're gonna describe the different items that constitute an atlas page. Examples of pages are available in the Annex part.  As said before the output can be *HTML* or *PDF* but the content is strictly the same for both of the mediums. On top of the page (Fig. \@ref(fig:head)) there is the name of the species, its taxonomy with the kingdom and the family. When available there's also the authority (name and year) and the IUCN status. It is an endangerment indicator for every species, with different levels of threat like *Least Concern* (LC), *Vulnerable* (VU) or *Critically Endangered* (CR). Below these, there are descriptive image and text (when available) that helps to know which species it is about if its name is not evocative enough. A link to the corresponding *Encyclopedia of Life* page is given for every species. The first map on the top left (Fig. \@ref(fig:alt)) is showing all the occurences of the species with the map of the area for background. The number of occurences for the species is written on the right of the maps.
 
-The last section of the page is presenting the results obtained for the different future scenarios. The two maps on the left are the extreme cases (RCP8.5 and 2080) with or without dispersion. There's 15 levels on the legend because of the 5 models and the 3 GCMs. For every GCM we have the binary response for every distribution model. That time we consider the species present on a pixel if at least 8 out of 15 answers are positive. Summing these pixels provides us the new *Species distribution area* for this scenario, and we can measure the percentage of variation relative to the projections for the present. Those informations are in the two last columns of the table. 
+(ref:cap-perf) Example of the table presenting the effectiveness indicators.
+
+```{r perf, results="asis", echo=FALSE}
+load("figures/plotting.rda")
+rownames(Perf.ca) <- c("Value")
+knitr::kable(Perf.ca, caption="(ref:cap-perf)",digits=2,align=c("c","c","c","c","c","c","c"))
+```
+
+(ref:cap-alt) Example of the maps presenting the presences (left) and the results of the models (right). 
+
+```{r alt, echo=FALSE, out.width="\\textwidth", fig.cap="(ref:cap-alt)"}
+knitr::include_graphics("figures/alt.png")
+```
+
+Every species have those items in common, but the presence of the other informations depend on the number of occurences for the species. We saw that earlier, we chose not to run the models if the species presented less than 10 observations. For those species, there isn't anything else on the atlas page. For other species with enough inidividuals, the results of the models are presented over several maps and tables. The second map (Fig. \@ref(fig:alt)) is showing the binary vote for every model concerning the presence of the species. If 3 models or more are considering the presence on a pixel, we admit the species is present there, and it is colored in green on the map. The sum of these presences gives us the *Species distribution area*, which is the predicted number of km^2^ with at least one presence of the species. Also there is a table (Tab. \@ref(tab:perf)) that shows the values for the effectiveness indicators that were presented earlier.
+
+On the following section, the graph on the left (Fig. \@ref(fig:niche)) is presenting the relation between *Annual precipitation* and *Mean annual temperature* : every species is marked by a dot at the intersection of its value for the two variables. It allows us to see if the species only live under certain conditions. For most of the species, those climatic niches are  relatively gathered. On the right of this section, there's firstly a table (Tab. \@ref(tab:tab)) that informs us on the environmental tendancy for places where individuals of the species where detected. There are the mean and quantiles for every variable studied, it gives an idea on the environment this species need. The second table (Tab. \@ref(tab:imp)) gives information on the importance of the climatic variables. In other words it designates which are the variables that are conditioning the most the presence of the species. We can read the results for every 5 models of `BIOMOD2`, and there's a synthesis on the two last columns.
+
+(ref:cap-niche) Example of the climatic niche.
+
+```{r niche, echo=FALSE, out.width="50%", fig.cap="(ref:cap-niche)"}
+knitr::include_graphics("figures/niche.png")
+```
+
+(ref:cap-tab) Example of the table presenting the values of the chosen variables.
+
+```{r tab, results="asis", echo=FALSE}
+knitr::kable(niche, caption="(ref:cap-tab)",digits=0,align=rep("l",length(niche)+1))
+```
+
+The last section of the page is presenting the results obtained for the different future scenarios. The two maps on the left (Fig. \@ref(fig:caf)) are the extreme cases (RCP8.5 and 2080) with or without dispersion. There's 15 levels on the legend because of the 5 models and the 3 GCMs. For every GCM we have the binary response for every distribution model. That time we consider the species present on a pixel if at least 8 out of 15 answers are positive. Summing these pixels provides us the new *Species distribution area* for this scenario, and we can measure the percentage of variation relative to the projections for the present. Those informations are in the two last columns of the table (Tab. \@ref(tab:df)). 
+
+(ref:cap-caf) Example of the maps for the extreme scenario with (left) or without (right) dispersion.
+
+```{r caf, echo=FALSE, out.width="\\textwidth", fig.cap="(ref:cap-caf)"}
+knitr::include_graphics("figures/caf.png")
+```
+
+(ref:cap-imp) Example of the table presenting the importance of the variables.
+
+(ref:cap-df) Example of the table presenting the results for future predictions.
+
+```{r imp, results="asis", echo=FALSE}
+names(VarImp) <- c("GLM","GAM","RF","MaxE","ANN","mrank","rank")
+knitr::kable(VarImp, caption="(ref:cap-imp)",digits=2,align=c("l","l","l","l","l","l","l","l"))
+```
+
+```{r df, results="asis", echo=FALSE}
+names(SDA.fut) <- c("Area","RCP","Year","Disp","Area","Change")
+df <- SDA.fut[,-c(1)]
+knitr::kable(df, caption="(ref:cap-df)",digits=0,align=c("l","l","l","l","l","l"))
+```
+
+
+
+\pagebreak
+
 
 ## Exploitation of the results
 
-With the projections of distribution that `BIOMOD2` is producing, it is possible to make some maps of specific richness, whether by taxon or with all of them. On the Fig. \@ref(fig:lemurs), \@ref(fig:baobabs), \@ref(fig:birds) and \@ref(fig:reptiles), the different figures are standing for : *(a) current*, *(b) 45 and 2050*, *(c) 45 and 2080*, *(d) 85 and 2050* and *(e) 85 and 2080*. 
+A prototype of the atlas is available at **http://etclab.org/atlas**. It was made with some species of the 4 taxons we run the models on, and it offers a good overview of the functionning of the atlas. With the projections of distribution that `BIOMOD2` is producing, it is possible to make some maps of specific richness by taxon. On the Fig. \@ref(fig:lemurs), \@ref(fig:baobabs), \@ref(fig:birds) and \@ref(fig:reptiles), the different figures are standing for : *(a) current*, *(b) 45 and 2050*, *(c) 45 and 2080*, *(d) 85 and 2050* and *(e) 85 and 2080*. 
+
+These maps help to identify the hotspots of species' preservation. Comparing the current maps to the future ones gives a good indication on the species that are threatened. The most obvious example is the one of the lemurs : we can see that presently they're living in the humid forests, east of Madagascar. In every future scenarios, the presence of the species invariably decreases, the last welcoming places for the lemurs being the heights of the mountains. 
 
 (ref:cap-lemurs) Specific richness for the lemurs.
 

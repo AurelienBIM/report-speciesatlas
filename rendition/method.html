@@ -150,6 +150,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="discussion.html"><a href="discussion.html#limitations"><i class="fa fa-check"></i>Limitations</a></li>
 <li class="chapter" data-level="" data-path="discussion.html"><a href="discussion.html#perspectives"><i class="fa fa-check"></i>Perspectives</a></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="annex.html"><a href="annex.html"><i class="fa fa-check"></i>Annex</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -210,22 +211,55 @@ max values : 276, 3337, 3373, 973, 2797</p>
 <div id="models" class="section level2">
 <h2>Models</h2>
 <p>Under a certain number of individuals for a given species, it is quite absurd to run models on it. It may theoretically make the calculus but the results would have no sense. After some experimentations, we decided to set this number to 10. It indeed removes a lot of species but we could have not make any interpretation on them.</p>
-<p>The package uses <code>BIOMOD2</code> for the technical part. It only takes its advantage and not its default, because the parameters are already set in <code>speciesatlas</code>. Each model returns a binary response for a presence at a specific location, and that is why having several models is so important to predict presence probability. The model averaging is quite simple, it was decided that if 3 models on 5 indicate a presence, we could consider it as well. We chose 5 models of <code>BIOMOD2</code> that were complementary and offer a solid adaptation to the diverstity of the data input. Those are :</p>
+<p>The package uses <code>BIOMOD2</code> for the technical part. It only takes its advantage and not its default, because the parameters are already set in <code>speciesatlas</code>. Each model returns a binary response for a presence at a specific location, and that is why having several models is so important to predict presence probability. The model averaging is quite simple, it was decided that if 3 models on 5 indicate a presence, we could consider it as well. We chose those 5 models of <code>BIOMOD2</code> :</p>
 <p>– <em>Generalized Linear Model (GLM)</em> : it is an adaptable generalization of the linear regression. It allows to connect the linear model to the response variable with a link function. That function is <em>logit</em> in the package. That model is very general and can suit to most of the cases.</p>
 <p>– <em>Generalized Additive Model (GAM)</em> <span class="citation">(Jones &amp; Almond <a href="#ref-Jones1992">1992</a>)</span> : it is close to a GLM but it benefits the properties of additive models. The linear relationship between the response and predictor variables is replaced by non-linear <em>smooths</em> functions. GAM can suit other cases than GLM, notably the ones where there’s few observations.</p>
 <p>– <em>Random Forest (RF)</em> : it is a supervised classification algorithm that creates plenty of decision trees. It is training on some of the data to classify the other. Thanks to the random process of the nodes, there is no overfit if there’s enough trees. That is the main advantage of this model.</p>
 <p>– <em>Maximum Entropy (MaxEnt)</em> : based on the number of individuals and the total energy, relative abundance distribution is predicted. Maximizing the entropy is the way to discriminate the different possibilities. The version used in the package is MaxEnt.Phillips.</p>
 <p>– <em>Artificial Neural Network (ANN)</em> : this model is inspired from brains’ neural network, it means that it is learning task after task. It’s interesting to have this model in the package because of its complementarity with the others.</p>
+<p>Eventually, we have a parametric model (GLM) that is very constrained, a non-parametric model (GAM) and 3 others machine learning models. All of them have pro and cons, like overparametrization but we think that this set of models offers a good complementarity and can adapt
+to the large diverstity of the data input.</p>
+
 </div>
 <div id="effectiveness-indicators" class="section level2">
 <h2>Effectiveness indicators</h2>
-<p>To verify the truthfulness of the models’ calculus, other functionalities of <code>BIOMOD2</code> can be used. The function <code>Find.Optim.Stat</code> offers several effectiveness indicators <span class="citation">(Thuiller <em>et al.</em> <a href="#ref-effectiveness">2010</a>)</span> than help to evaluate the results. For the first 4 indicators, the more the values are close to 1, the best the functioning is. And for the 2 last, the best possible value is 100%. Among them, the following were chosen :</p>
-<p>– <em>Relative Operating Characteristic (ROC)</em> : evaluates the models using the Area Under the Curve (AUC)</p>
-<p>– <em>Accuracy (OA)</em></p>
-<p>– <em>True Skill Statistic (TSS)</em></p>
-<p>– <em>KAPPA (K)</em></p>
-<p>– <em>Sensitivity (Sen.)</em> : fraction of the true positive</p>
-<p>– <em>Specificity (Spe.)</em> : fraction of the true negative</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">Predicted / Observed</th>
+<th align="center">Presence</th>
+<th align="center">Absence</th>
+<th align="center">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Presence</td>
+<td align="center"><span class="math inline">\(n_{11}\)</span></td>
+<td align="center"><span class="math inline">\(n_{01}\)</span></td>
+<td align="center"><span class="math inline">\(n_{.1}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">Absence</td>
+<td align="center"><span class="math inline">\(n_{10}\)</span></td>
+<td align="center"><span class="math inline">\(n_{00}\)</span></td>
+<td align="center"><span class="math inline">\(n_{.0}\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center">Total</td>
+<td align="center"><span class="math inline">\(n_{1.}\)</span></td>
+<td align="center"><span class="math inline">\(n_{0.}\)</span></td>
+<td align="center">n</td>
+</tr>
+</tbody>
+</table>
+<p>To verify the truthfulness of the models’ calculus, other functionalities of <code>BIOMOD2</code> can be used. The function <code>Find.Optim.Stat</code> offers several effectiveness indicators <span class="citation">(Thuiller <em>et al.</em> <a href="#ref-effectiveness">2010</a>)</span> than help to evaluate the results. Some of the effectiveness indicators relies on the exploitation of the <em>confusion matrix</em> <span class="citation">(Liu, White &amp; Newell <a href="#ref-accuracy">2010</a>)</span>. We say that they are threshold-dependent because they need binary variables. Therefore the threshold is the most important parameter in those cases. The confusion matrix is a table that confronts the predicted and the observed results, and there is an example above. For every indicator, the goal is to be as close as possible to 1 or 100%. We chose the following ones :</p>
+<p>– <em>Relative Operating Characteristic (ROC)</em> : it is a threshold-independent indicator.That means that the values don’t need to be binarized, it works on continuous prediction. It evaluates the models using the Area Under the receiver operating characteristic Curve (AUC). It’s one of the index the most used in statistic, and also in Species Distribution Modelling (SDM).</p>
+<p>– <em>Accuracy (OA)</em> : it is threshold-dependent, and evaluates how many cases had been correctly classify with the following equation : <span class="math inline">\(OA = (n_{11} + n_{00})/n\)</span></p>
+<p>– <em>True Skill Statistic (TSS)</em> : depends a lot on Sensitivity and Specificity because its formula is : <span class="math inline">\(TSS = Sen. + Spe. - 1\)</span>. It is defined as the average of the net prediction success rate for both presence and absence sites.</p>
+<p>– <em>KAPPA (K)</em> : this is a way to “normalize” the accuracy, to take in consideration the relative part of its results. Accuracy tends to overestimate the values. It’s calculated with : <span class="math inline">\(K = (OA-A)/(1-A)\)</span> where <span class="math inline">\(A=(n_{11}*n_{11}+n_{01}*n_{10})/n^{2}\)</span></p>
+<p>– <em>Sensitivity (Sen.)</em> : probability of making a right prediction on the presence of a species (true positive). It’s calculated with : <span class="math inline">\(Sen. = n_{11}/n_{1.}\)</span></p>
+<p>– <em>Specificity (Spe.)</em> : probability of making a right prediction on the absence of a species (true negative). It’s calculated with : <span class="math inline">\(Sen. = n_{11}/n_{1.}\)</span></p>
 </div>
 <div id="structure-of-the-code" class="section level2">
 <h2>Structure of the code</h2>
@@ -243,11 +277,20 @@ max values : 276, 3337, 3373, 973, 2797</p>
 </div>
 <div id="creation-of-a-r-package" class="section level2">
 <h2>Creation of a R package</h2>
-<p>Creating a R package was in actual fact a brand new thing for me. A lot of online tutorials helped me to achieve this task, but the main library that I used was <code>Devtools</code>. The first step for the creation is the command <code>devtools::create(&quot;package.name&quot;)</code> : it creates the basic architecture of the package, also called the skeleton. The following files are automatically generated :</p>
+<p>Creating a R package was actually a brand new thing for me. The structure of the package is visible on Fig. <a href="method.html#fig:dir">2</a>. A lot of online tutorials helped me to achieve this task, but the main library that I used was <code>Devtools</code>. The first step for the creation is the command <code>devtools::create(&quot;package.name&quot;)</code> : it creates the basic architecture of the package, also called the skeleton. The following files are automatically generated :</p>
 <p>– a <em>DESCRIPTION</em> file : informations like authors, version, license and libraries to import are in it.</p>
 <p>– a <em>NAMESPACE</em> file : here are established functions that can be run by the user and functions from libraries that will be used in the package.</p>
 <p>– a <em>.gitignore</em> file : you indicate if there are files (test scripts or development notes) that you don’t want to be in the final package.</p>
 <p>– a <em>R/</em> folder : all the R scripts that constitute the package must be put here.</p>
+<p>– a <em>inst/</em> folder : if the package needs other files than R scripts like images or R markdown files, they must be put in this folder. If a file is not in this folder, it won’t be retained during the installation of the package.</p>
+<p>– a <em>man/</em> folder : Here are stored the manual files, coded in Markdown. They are explaining the different functions and the package in general. It is what you see when you type <code>?speciesatlas</code> or <code>help(speciesatlas)</code>.</p>
+
+<div class="figure" style="text-align: center"><span id="fig:dir"></span>
+<img src="figures/directory.png" alt="Structure of the speciesatlas package." width="\textwidth" />
+<p class="caption">
+Figure 2: Structure of the <code>speciesatlas</code> package.
+</p>
+</div>
 </div>
 <div id="tools-for-the-presentation" class="section level2">
 <h2>Tools for the presentation</h2>
@@ -269,6 +312,9 @@ max values : 276, 3337, 3373, 973, 2797</p>
 </div>
 <div id="ref-effectiveness">
 <p>Thuiller, W., Lafourcade, B., Engler, R. &amp; Araujo, M. (2010) <em>Presentation Manual for Biomod</em>.</p>
+</div>
+<div id="ref-accuracy">
+<p>Liu, C., White, M. &amp; Newell, G. (2010) Measuring and comparing the accuracy of species distribution models with presence-absence data., <strong>34</strong>, 232–243.</p>
 </div>
 <div id="ref-devtools">
 <p>Wickham, H., Hester, J. &amp; Chang, W. (2018) <em>Devtools: Tools to Make Developing R Packages Easier</em>.</p>
@@ -329,6 +375,19 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>
